@@ -1,0 +1,361 @@
+<!DOCTYPE html><html lang="en-us">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+
+<meta name="dcterms.rights" content="© Copyright IBM Corporation 2018">
+
+
+
+<meta name="description" content="">
+
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "en-us",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><!-- Licensed Materials - Property of IBM -->
+<!-- US Government Users Restricted Rights -->
+<!-- Use, duplication or disclosure restricted by -->
+<!-- GSA ADP Schedule Contract with IBM Corp. -->
+<link rel="stylesheet" type="text/css" href="ibmdita.css">
+<title>Use Cases</title>
+</head>
+<body id="wp4h_gxp_c_cm_usecases"><main role="main"><article role="article" aria-labelledby="d2466e10">
+<h1 class="topictitle1" id="d2466e10">Use Cases</h1>
+
+
+
+
+
+<div class="body conbody"><p class="shortdesc"></p>
+
+<section class="section" role="region" aria-labelledby="d2466e19"><h2 class="sectiontitle" id="d2466e19">Available use cases</h2>
+
+<div class="p">The users and uses of the Consent Manager service are listed here. Not all of these use cases are
+commonly practiced.<ul>
+<li>Administrator creates a tenant</li>
+
+<li>Tenant creates an access type</li>
+
+<li>Tenant creates a purpose</li>
+
+<li>Tenant creates a consenter</li>
+
+<li>Tenant creates a data subject's consent</li>
+
+<li>Tenant updates a data subject's consent</li>
+
+<li>Tenant checks consent enforcement</li>
+
+<li>Tenant checks a minor's age</li>
+
+<li>Auditor gets audit trail records</li>
+
+</ul>
+</div>
+
+<p>All possible uses of the Consent Manager service by various users are illustrated in the
+following figure.</p>
+
+<div class="p"><img src="userImages/CM_use_case.jpg" width="550" alt="Consent manager use cases including users and functions"><figure class="fignone" id="wp4h_gxp_c_cm_usecases__fig_xzk_yrf_sbb"><figcaption>Figure 1. Consent manager use cases</figcaption>
+
+</figure>
+</div>
+
+</section>
+
+<section class="section" role="region" aria-labelledby="d2466e69"><h2 class="sectiontitle" id="d2466e69">A note about roles and relationships</h2>
+
+<p>Whenever FHIR resources are either ingested or retrieved, patient consent is checked. Consent
+manager is not aware of roles and relationships, which are set in the Role and Relationship Access
+Manager (RRAM) service. Roles and relationships must be mapped to "purposes" before an application
+sends a call operation to the Consent Manager service. Purpose is scoped to either study or program
+when ingesting or retrieving data. The Orchestration component of FHIR creates a
+<dfn class="term">consent</dfn> for a specific consenter and a <dfn class="term">purpose</dfn> that is connected to a role
+or relationship, which is stored in the RRAM service. </p>
+
+<div class="p"><img src="userImages/system_components_wFunction.jpg" width="500" alt="FHIR ingestion of data from a client application, including FHIR, XDI, DMO, Consent management, RRAM, and Persistence services."><figure class="fignone" id="wp4h_gxp_c_cm_usecases__fig_c2r_t5k_wbb"><figcaption>Figure 2. Data ingestion into FHIR and consent check</figcaption>
+
+</figure>
+</div>
+
+</section>
+
+<section class="section" role="region" aria-labelledby="d2466e92"><h2 class="sectiontitle" id="d2466e92">Consent management versus consent information</h2>
+
+<p>Consent management refers to the ingestion and retrieval of consent information, where consent
+information corresponds to the Contract FHIR resource type. Consent enforcement consists in applying
+the consent information to the ingestion of resources subject to consent. </p>
+
+</section>
+
+<section class="section" role="region" aria-labelledby="d2466e101"><h2 class="sectiontitle" id="d2466e101">Consent enforcement</h2>
+
+<p>Patient consent is enforced at both ingestion and retrieval events. If an active consent (FHIR
+contract resource) record is not on file for the patient and purpose of the request, the data is not
+ingested or returned to the caller, and the calling client receives a <samp class="ph systemoutput">403 error
+(forbidden)</samp> whenever the client attempts to create (<code class="ph codeph">POST</code>), update
+(<code class="ph codeph">PUT</code>) or retrieve (<code class="ph codeph">GET</code>) patient data.</p>
+
+</section>
+
+<section class="section" role="region" aria-labelledby="d2466e122"><h2 class="sectiontitle" id="d2466e122">Consent management interceptor</h2>
+
+<div class="p">When a Contract resource is sent to the FHIR Server by way of a <code class="ph codeph">DELETE</code> command
+(<code class="ph codeph">POST</code> or <code class="ph codeph">PUT</code> of individual Contract resources is not permitted),
+an interceptor captures the request and communicates the deletion of the Contract resource based on
+the <span class="keyword parmname">resourceName</span> to the Consent Manager service. The Consent Manager extracts
+the patient and purpose information from the Contract resource and deletes the consent
+record.<div class="steps note"><span class="notetitle">Note:</span> Terms of Use Contracts are not sent to the Consent Manager.</div>
+</div>
+
+</section>
+
+<section class="section" role="region" aria-labelledby="d2466e146"><h2 class="sectiontitle" id="d2466e146">Consent enforcement interceptor</h2>
+
+<div class="p">Prior to the Consent management interceptor running, there is an additional interceptor that
+enforces consent on read and write operations.<ul>
+<li>When a write operation is sent to the FHIR Server (<code class="ph codeph">CREATE</code>,
+<code class="ph codeph">UPDATE</code>, <code class="ph codeph">DELETE</code>), the “before” event is used to intercept the call
+(<code class="ph codeph">beforeCreate</code>, <code class="ph codeph">beforeUpdate</code>, <code class="ph codeph">beforeDelete</code>) before
+the write happens.</li>
+
+<li>When a read operation is sent to the FHIR Server (<code class="ph codeph">READ</code>, <code class="ph codeph">VREAD</code>,
+<code class="ph codeph">SEARCH</code>), the “after” event is used to intercept the call
+(<code class="ph codeph">afterRead</code>, <code class="ph codeph">afterVread</code>, <code class="ph codeph">afterSearch</code>) after the
+resources are read.</li>
+
+</ul>
+</div>
+
+<p><strong>Consent enforcement interceptor checks</strong></p>
+
+<div class="p">There are 4 primary checks that are done by the Consent enforcement interceptor:<dl>
+
+<dt class="dlterm">Check role</dt>
+
+<dd class="dlentry">Using DMO, this check communicates to RRAM to ensure the requester, which is the internal
+identifier that comes from the <code class="ph codeph">IBM-App-User-IntId</code> header (if provided, otherwise a
+look up is performed using the <code class="ph codeph">IBM-App-User</code> header
+is
+in the role, which is pulled from the <dfn class="term">X-WHC-LSF-rolename</dfn> header, that was explicitly
+specified. If a role is not specified, the role of <code class="ph codeph">Patient</code> is used by default. If
+the call does not pass this role check, an exception is thrown, and the call is ended with no data
+being ingested or returned to the caller.</dd>
+
+
+
+<dt class="dlterm">Check relationship</dt>
+
+<dd class="dlentry">Using the value within the <dfn class="term">X-WHC-LSF-rolename</dfn>, if the <dfn class="term">rolename</dfn> value
+is <code class="ph codeph">Guardian</code> or <code class="ph codeph">ThirdParty</code>, then, using DMO, a call to RRAM is made
+to ensure the user has the appropriate role and has a relationship to the patient. If the role is
+<code class="ph codeph">Patient</code>, the internal ID is checked to match the patient ID (in the
+<code class="ph codeph">patientid</code> extension element of the resource) using the
+<code class="ph codeph">IBM-App-User-IntId</code> header, if provided. Otherwise a lookup is done using the
+<code class="ph codeph">IBM-App-User</code> header
+.
+If the call does not pass this role check, an exception is thrown, and the call is ended with no
+data being ingested or returned to the caller. If the value is not <code class="ph codeph">Guardian</code>,
+<code class="ph codeph">Patient</code> or <code class="ph codeph">ThirdParty</code>, the platform does not check the
+relationship.</dd>
+
+
+
+<dt class="dlterm">Check consent</dt>
+
+<dd class="dlentry">Ensures consent has been established and is active for the patient. Consent is checked against
+the patient and the purpose for which the request is being made. The purpose is built based on the
+details of the request: if it’s a study-based request, the purpose is built as a “studyid/siteid”
+combination for a clinical study, and “appName/appVersionNumber” combination for a commercial study.
+If the call operation does not pass this consent check, an exception is thrown, and the call ends
+with no data being ingested or returned to the operation caller.</dd>
+
+
+</dl>
+
+</div>
+
+<div class="p">For practitioner and dashboard user roles, there is an additional check <dl>
+
+<dt class="dlterm">Check user access</dt>
+
+<dd class="dlentry">Ensures that the requester has the role they claim to have, with proper access types for the
+current interaction, and for the purpose derived from the resources involved in the event. For
+example, this check is used to ensure a dashboard user that is associated with one study can perform
+a search of all of the resources within that study and cannot access or interact with resources from
+a different study.</dd>
+
+
+</dl>
+</div>
+
+</section>
+
+<section class="section" role="region" aria-labelledby="d2466e298"><h2 class="sectiontitle" id="d2466e298">Participant consent data</h2>
+
+<p>The following figure illustrates how  handles participant consent data.</p>
+
+<div class="p"><img id="wp4h_gxp_c_cm_usecases__image_jrd_3mz_p1b" src="userImages/wp4h_gxp_CM_small.jpg" width="500" alt="Diagram showing flow of data from participant to FHIR service to Consent Manager"><figure class="fignone" id="wp4h_gxp_c_cm_usecases__fig_u4y_dj1_q1b"><figcaption>Figure 3.  handles participant consent
+data</figcaption>
+
+</figure>
+</div>
+
+</section>
+
+<section class="section" role="region" aria-labelledby="d2466e315"><h2 class="sectiontitle" id="d2466e315">Create a tenant</h2>
+
+<p>The following sequence diagram shows the initial process of creating a new tenant, creating an
+access type, purpose, location, and minor. Only administrator users with authorization can create a
+tenant. Accessing the Consent Management API requires authorization before the platform can create
+or update tenants. The "Orchestrator" shown in the diagram is the Data manager orchestrator (DMO).
+The Data manager orchestrator is a software development kit (SDK) that is called by the FHIR
+service. DMO enforces consent rules during the data ingestion and retrieval (<code class="ph codeph">GET</code>,
+<code class="ph codeph">CREATE</code>, and <code class="ph codeph">UPDATE</code>). The access type in the diagram is set to
+read, write, update, transfer, and so on. The purpose in the diagram describes the purposes for
+which data is collected in the system and requires consent. The final step is the creation of a role
+in the Role and Relationship Access Manager (RRAM) service.</p>
+
+<div class="p"><img src="userImages/cm_create_tenant.jpg" width="500" alt="Creating a new tenant with the Consent Manager API"><figure class="fignone" id="wp4h_gxp_c_cm_usecases__fig_kns_f3g_sbb"><figcaption>Figure 4. Consent Manager tenant creation sequence diagram</figcaption>
+
+</figure>
+</div>
+
+</section>
+
+<section class="section" role="region" aria-labelledby="d2466e341"><h2 class="sectiontitle" id="d2466e341">Capture participant consent</h2>
+
+<p>When a participant enrolls in a study, the DMO service passes participant consent to the Consent
+Manager service. The Consent Manager service stores the participant's agreement to opt in and share
+their data for the study. The sequence diagram in the following figure shows the interaction to
+document a specific participant’s consent choices. Consent can be given by the participant (data
+subject), or by a legal guardian. At this stage, Consent manager indicates the age until which a
+person is considered a minor by law in your geographic location. A consenter is also created in this
+flow, which is any data subject whose personal data is collected or who needs to supply consent for
+data usage (either for themselves or for a minor or other person under their guardianship). </p>
+
+<div class="p"><img src="userImages/cm_create_consent.jpg" width="550" alt="Capturing consent with Consent Manager, orchestrator, and RRAM"><figure class="fignone" id="wp4h_gxp_c_cm_usecases__fig_bjw_gjj_sbb"><figcaption>Figure 5. Capturing participant consent</figcaption>
+
+</figure>
+</div>
+
+</section>
+
+<section class="section" role="region" aria-labelledby="d2466e362"><h2 class="sectiontitle" id="d2466e362">Consent enforcement</h2>
+
+<p>Consent enforcement is run to enforce policies and consent by enforcement points wherever data is
+accessed in the system, as shown in the following figure. Access approval can be requested at the
+purpose level only, or for accessing specific data items. More context information related to
+relationships is provided by the RRAM service. In the following figure, there are two requests for
+consent enforcement: the first request requires role and relationship-based access control (RBAC),
+the second request is at the purpose level only. In both examples the client application requests
+approval for access to data subject (patient) health data.</p>
+
+<div class="p">The following numbered steps correspond to the enforcement process shown in Figure 6. The
+<dfn class="term">Client</dfn>, at the top-left, begins the interaction.<div class="steps note"><span class="notetitle">Note:</span> The <dfn class="term">Client</dfn> can be
+any client that uses the Orchestrator component (DMO).</div>
+<ol>
+<li>"Check access approval" is a request that is called by the client application. The request sent
+to the Orchestrator includes the Requester (optional), role, patient (consenter), purpose, and
+access type (export, query, erase, notype). The examples box on the bottom right lists the possible
+permutations of requests. The patient, who is the consenter (data subject who must grant consent for
+their PHI to be accessed by another user and for a specific purpose), is in each request example.
+<p><strong>alt</strong> Requester box</p>
+</li>
+
+<li>Requester, role, and patient are checked against role and relationship-based access control
+(RBAC) as set in the Role and Relationship Access Manager (RRAM) service. The system checks whether
+the requestor is a member of a role, such as <dfn class="term">data analyst</dfn>, which has permission to use
+data from data subjects, such as the patient (consenter).</li>
+
+<li>The check passes. The requester has the proper role.<p><strong>alt</strong> Role box within <strong>alt</strong>
+Requester box</p>
+</li>
+
+<li>Next, a request to retrieve the purpose connected to the requester's role is sent to the RRAM
+service. The request is sent to RRAM. </li>
+
+<li>The purpose which the requester's role is connected to is returned to the Orchestrator. This
+means the requester's role must have sufficient privileges to access the patient's PHI. </li>
+
+<li>Based on the role's purpose, the patient (consenter), and access type (read, read/write, and so
+on), the Orchestrator requests the Consent manager grant or deny consent. The system checks if the
+patient (consenter) has consented to share their PHI with the same study (purpose) that the
+requestor's role (<dfn class="term">data analyst</dfn>) is a member of. Lastly, the access type being requested
+(export, query, erase, notype) is checked and if the requester's role has the appropriate
+permissions (export, query, erase, notype) to the consenter's data, all conditions for consent are
+satisfied.</li>
+
+<li>Consent is granted by Consent manager. This role and relationship-based access control request
+is complete.<p><strong>alt</strong> Purpose box</p>
+</li>
+
+<li>This access approval request is a purpose-level only request. The orchestrator sends the purpose
+(site, study, both, and so on), patient (consenter), and access type (export, query, erase, notype)
+to the Consent manager to enforce consent. If the patient (consentor) has consented to share their
+PHI with the study (purpose) for which data is being requested, consent is granted for the access
+type (export, query, erase, notype) specified in the request.</li>
+
+<li>Consent manager grants consent. </li>
+
+<li>Access to patient (consenter) information is approved. </li>
+
+</ol>
+</div>
+
+<div class="p"><img src="userImages/ConsentEnforcement2.jpg" width="550" alt="sequence of actions between client, DMO, RRAM, and CM to enforce consent"><figure class="fignone" id="wp4h_gxp_c_cm_usecases__fig_tyg_3jj_sbb"><figcaption>Figure 6. Consent enforcement</figcaption>
+
+</figure>
+</div>
+
+</section>
+
+<section class="section" role="region" aria-labelledby="d2466e444"><h2 class="sectiontitle" id="d2466e444">Withdrawing participant consent</h2>
+
+<p>A participant can opt out by withdrawing their consent for a specific purpose at any time. If the
+participant's consent status is <dfn class="term">opt-out</dfn>, DMO does not ingest new data. However, the
+withdrawal of consent does not apply to data previously ingested. Any existing data that is gathered
+before the participant withdraws consent is covered by the previous consent agreement. Study
+researchers can continue to access the participant data that was ingested and stored before the
+withdrawal of consent.</p>
+
+</section>
+
+<section class="section" role="region" aria-labelledby="d2466e457"><h2 class="sectiontitle" id="d2466e457">Data protection</h2>
+
+<p>RRAM stores role and relationship data in Db2 database. All the data at rest is encrypted with
+DB2 native encryption. All data transactions are secured with the TLS 1.2 protocol.</p>
+
+</section>
+
+<section class="section" role="region" aria-labelledby="d2466e466"><h2 class="sectiontitle" id="d2466e466">Audit trail</h2>
+
+<p>Any creation or modification to user consent creates an audit trail record in the Trail Records
+database, which includes the state of user consent with its updated fields. Changes to role and
+relationship are part of Part 11 and are subject to audit requirements. For GDPR, Role and
+relationship access manager (RRAM) audits the location of the user who accesses the data based on
+the user’s address in the FHIR profile. For HIPAA requirements, GDAM is deployed to monitor access
+to the FHIR database.</p>
+
+</section>
+
+</div>
+
+<aside role="complementary" aria-labelledby="d2466e10"><nav role="navigation">
+<div class="linklist"><ul><li><img src="sout.gif" alt=""><a href="https://hl7.org/fhir/DSTU2/summary.html" rel="external" target="_blank" title="(Opens in a new tab or window)">HL7
+FHIR standards framework summary</a></li>
+</ul></div>
+</nav></aside>
+</article></main></body></html>

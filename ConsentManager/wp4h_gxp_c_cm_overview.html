@@ -1,0 +1,181 @@
+<!DOCTYPE html><html lang="en-us">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+
+<meta name="dcterms.rights" content="© Copyright IBM Corporation 2018">
+
+
+
+<meta name="description" content="Consent Manager is a service that securely stores participant consent records apart from the data payload.">
+
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "en-us",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><!-- Licensed Materials - Property of IBM -->
+<!-- US Government Users Restricted Rights -->
+<!-- Use, duplication or disclosure restricted by -->
+<!-- GSA ADP Schedule Contract with IBM Corp. -->
+<link rel="stylesheet" type="text/css" href="ibmdita.css">
+<title>Overview</title>
+</head>
+<body id="concept_zxs_x3z_p1b"><main role="main"><article role="article" aria-labelledby="d2196e10">
+<h1 class="topictitle1" id="d2196e10">Overview</h1>
+
+
+<div class="body conbody"><p class="shortdesc">Consent Manager is a 
+service that securely stores participant consent records apart from the data payload.</p>
+
+<p>In addition to personal health information (PHI) data, the <a href="https://watsonpow01.rch.stglabs.ibm.com/services/cognitive_catalog/catalog/asset.html?id=AWIHrHzHwiyMWyltT-Eh" rel="external" target="_blank" title="(Opens in a new tab or window)">FHIR service</a> captures participants' consent for their data to
+be used in a clinical study. The Consent Manager service stores the patient consent record.</p>
+
+<p>Before participants can submit their PHI data, they must "opt-in" to share their data for a
+specific <dfn class="term">purpose</dfn>. For example, if patients opt in to an Asthma study, they agree to
+share their PHI data for studying asthma.</p>
+
+<p> authorizes users (study
+researchers) to access only the data that participants consent to share for a specified purpose,
+such as studying asthma.</p>
+
+<div class="bodydiv conbodydiv">
+<section class="section" role="region" aria-labelledby="d2196e38"><h2 class="sectiontitle" id="d2196e38">Consent manager capabilities</h2>
+
+<p>The Consent Manager service supports the following capabilities:</p>
+
+<div class="p">
+<ul>
+<li>Consent management and consent enforcement to support purpose-based consent to protected health
+information (PHI) and to comply with regulatory requirements.</li>
+
+<li>Consent management and consent enforcement to support role-based consent, relationship-based
+consent, and named-based consent to patient data and to comply with regulatory requirements.</li>
+
+<li>Guardian consent to support minor age or incapacitated patients.</li>
+
+<li>Consent versioning support.</li>
+
+<li>Indicate the age until which a person is considered a minor by law in a specific geographical
+area.</li>
+
+<li>Attach <dfn class="term">terms and conditions</dfn> to a consent purpose.</li>
+
+</ul>
+
+</div>
+
+</section>
+
+</div>
+<div class="bodydiv conbodydiv">
+<section class="section" role="region" aria-labelledby="d2196e78"><h2 class="sectiontitle" id="d2196e78">Consent manager context</h2>
+
+<div class="p">The Consent Manager service interacts with various  services and functions, as shown in Figure
+1; the following list provides examples of these interactions.<ul>
+<li>The FHIR data ingestion (FHIR) function uses the Consent Manager service to check whether a
+patient provided consent for a specific purpose.</li>
+
+<li>The Patient Data Export (PDE) service uses the Consent Manager service to control role-based
+access to patient data by PDE administrators and investigators.</li>
+
+<li>The LMA service collects audit log data that the Consent manager creates and stores in
+Operational system (OS) level files.</li>
+
+<li>The Audit service collects audit trail records.</li>
+
+<li>The FHIR, PDE, and Audit services access the Consent manager through calls that are sent to REST
+APIs by using a SSL/TLS connection.</li>
+
+</ul>
+</div>
+
+<div class="p"><img src="userImages/ContextDiagram.jpg" width="500" alt="Consent manager context diagram"><figure class="fignone" id="concept_zxs_x3z_p1b__fig_wvm_tq5_gbb"><figcaption>Figure 1. Consent Manager context diagram</figcaption>
+
+</figure>
+</div>
+
+</section>
+
+</div>
+<div class="bodydiv conbodydiv"><section class="section" role="region" aria-labelledby="d2196e119"><h2 class="sectiontitle" id="d2196e119">Consent manager components</h2>
+
+<div class="p">It is useful to familiarize yourself with the different components of the Consent Manager
+service. The Consent Manager service is a Node.js application. The service uses Db2 to store consent
+data, audit trail records, consent history, and access logs. The Consent Manager service consists of
+three different components:<dl>
+
+<dt class="dlterm">Consent manager application</dt>
+
+<dd class="dlentry">Node.js application. The application exposes the Consent Manager API and Audit API.</dd>
+
+
+
+<dt class="dlterm">Consent data store</dt>
+
+<dd class="dlentry">Db2 database. Stores consent information.</dd>
+
+
+
+<dt class="dlterm">Trail Records data store</dt>
+
+<dd class="dlentry">Db2 database. Stores audit trail records, access logs, and consent history.</dd>
+
+
+</dl>
+</div>
+
+<p>The Consent manager component diagram in Figure 2 illustrates the various Consent Manager service
+components and their relationships with each other. </p>
+
+<div class="p">
+<img src="userImages/CM_components.jpg" width="550" alt="Consent Manager components: application, datastore, and trail records datastore"><figure class="fignone" id="concept_zxs_x3z_p1b__fig_hkv_hbl_fbb"><figcaption>Figure 2. Consent manager component diagram</figcaption>
+
+</figure>
+</div>
+
+<div class="p">It is important to note the following key facts about the Consent Manager service:<ul>
+<li>The Consent manager server is a Node.js application.</li>
+
+<li>The Consent manager server is deployed in multiple instances, in a scale-out configuration, and
+uses DataPower® appliances to properly balance the load
+of incoming requests. </li>
+
+<li>Each Consent manager instance is stateless, and if an instance fails, its load is handled by one
+of the remaining instances. </li>
+
+<li>The Consent manager server is controlled and monitored by M/Monit. M/Monit is used to detect any
+failure of service and restart the Consent manager application if necessary. </li>
+
+<li>The solution depends on IBM® Db2 being properly deployed in
+a HA/DR configuration for replicating data in a standby database.</li>
+
+</ul>
+</div>
+
+</section>
+
+<section class="section" role="region" aria-labelledby="d2196e194" data-hd-audience="InternalOnly"><h2 class="sectiontitle" id="d2196e194">Data Protection</h2><p>Both Consent and Trail records
+databases protect data at rest with Db2 native encryption.</p>
+<strong>Data Protection in Motion</strong><p>All
+data transactions are secured with the TLS 1.2 cryptographic protocol.</p>
+<strong>Key
+Management</strong><p>The keys for connecting to Consent Manager are created by DataPower.</p>
+<p>The keys for connecting Consent Manager to Consent and Trail
+Records databases are provided by the Db2 HADR solution and stored in the Consent Manager
+application.</p>
+</section>
+</div>
+</div>
+
+</article></main></body></html>

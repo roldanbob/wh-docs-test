@@ -1,0 +1,1170 @@
+<!DOCTYPE html><html lang="en-us">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+
+<meta name="dcterms.rights" content="© Copyright IBM Corporation 2018">
+
+
+
+<meta name="description" content="">
+
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "en-us",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><!-- Licensed Materials - Property of IBM -->
+<!-- US Government Users Restricted Rights -->
+<!-- Use, duplication or disclosure restricted by -->
+<!-- GSA ADP Schedule Contract with IBM Corp. -->
+<link rel="stylesheet" type="text/css" href="ibmdita.css">
+<title>Basic Flow</title>
+</head>
+<body id="concept_zxs_x3z_p1b"><main role="main"><article role="article" aria-labelledby="d69e10">
+<h1 class="topictitle1" id="d69e10">Basic Flow</h1>
+
+
+<div class="body conbody"><p class="shortdesc"></p>
+
+<p><strong>Solution developer responsibilities</strong></p>
+
+<p>As the solution developer of your  application, you must do the following:</p>
+
+<dl>
+
+<dt class="dlterm">Write a client app for each purpose.</dt>
+
+<dd class="dlentry">For each purpose in your 
+solution, you should provide a client app through which participants submit their consent to use
+their data, and their PHI data. The client app also allows participants to withdraw their consent.
+The client app can be available to participants on any compatible device, such as a mobile device
+(cell phone or tablet) or a laptop.</dd>
+
+
+
+<dt class="dlterm">Obtain participant consent to share data for the purpose.</dt>
+
+<dd class="dlentry">Before your application collects any PHI data from a participant, the client app must obtain the
+participant's consent data and send it to your Watson Platform for Health application. </dd>
+
+
+
+<dt class="dlterm">Submit participant consent information to Watson Platform for Health in Contract FHIR resource
+format.</dt>
+
+<dd class="dlentry">Your application calls FHIR server APIs, which interact internally with the Consent Manager
+service. (Your application does not call Consent Manager service APIs directly.) Your application
+sends a <span class="keyword cmdname">POST</span> API call for the <strong>Contract</strong>
+<a href="https://www.hl7.org/fhir/resourcelist.html" rel="external" target="_blank" title="(Opens in a new tab or window)">FHIR resource
+type</a> to submit the following consent information:<dl>
+
+<dt class="dlterm">Clinical subject (the participant who provides the consent)</dt>
+
+<dd class="dlentry">Specify the participant's email address in the <strong><span class="keyword parmname">value</span></strong> field of the
+<strong><span class="keyword parmname">Contract.identifier</span></strong> element.</dd>
+
+
+
+<dt class="dlterm">Start date</dt>
+
+<dd class="dlentry">Specify the date in the <strong><span class="keyword parmname">start</span></strong> field of the
+<strong><span class="keyword parmname">Contract.applies</span></strong> element.</dd>
+
+
+
+<dt class="dlterm">End date</dt>
+
+<dd class="dlentry">Specify the date in the <strong><span class="keyword parmname">end</span></strong> field of the
+<strong><span class="keyword parmname">Contract.applies</span></strong> element.</dd>
+
+
+
+<dt class="dlterm">Consent status (opt-in | opt-out)</dt>
+
+<dd class="dlentry">Define consent status in the <strong><span class="keyword parmname">text</span></strong> field of the
+<strong><span class="keyword parmname">Contract.term.action coding</span></strong> element. Set the value of the text field to
+<strong><span class="keyword option">Active</span></strong> or <strong><span class="keyword option">Withdrawn</span></strong>.</dd>
+
+
+</dl>
+<p>Example <strong><span class="keyword parmname">Contract</span></strong> resource for a participant who
+opts-in:</p>
+<pre class="codeblock"><code>{"resourceType" : "Contract",
+&nbsp; "identifier" : [{"system" : "www.ibm.com/watsonhealth/fhir/extension/teva/r1/</code></pre><pre class="codeblock"><code>developmentID",<span class="keyword parmname">"value" : "johndoe@company.com"</span>}],
+  "issued" : "2016-06-22T00:47:00-04:00",
+  "applies" : {<span class="keyword parmname">"start": "2016-06-22T00:49:00-04:00"</span>,<span class="keyword parmname">"end": "2026-06-22T00:49:00-04:00"</span>},
+  "term": [{"action":
+            [{"coding": 
+               [{"system": "http://www.hl7.org/fhir/v2/0498","code": "A"}],
+               <span class="keyword parmname">"text": "Active"</span>
+            }]
+           }],
+   "extension": [
+      {"url": "http://www.ibm.com/watsonhealth/fhir/extensions/whc-lsf/1.0/studyid",</code></pre><pre class="codeblock"><code>"valueString": "&lt;&lt;STUDY_ID&gt;&gt;"},
+      {"url": "http://www.ibm.com/watsonhealth/fhir/extensions/whc-lsf/1.0/siteid",
+"valueString": "&lt;&lt;SITE_ID&gt;&gt;"},
+      {"url" : "http://www.ibm.com/watsonhealth/fhir/extensions/whc-lsf/1.0/patientid",
+"valueString" : "&lt;&lt;PATIENT_ID&gt;&gt;"}
+   ]
+}</code></pre></dd>
+
+
+
+<dt class="dlterm">Submit participant consent withdrawal, if applicable</dt>
+
+<dd class="dlentry">To update a participant's consent data, your application sends a <span class="keyword cmdname">PUT</span> API call
+for the <code class="ph codeph">Contract</code>
+<a href="https://www.hl7.org/fhir/resourcelist.html" rel="external" target="_blank" title="(Opens in a new tab or window)">FHIR resource
+type</a> to submit the <code class="ph codeph">opt-out</code> consent status.<p>Example
+<span class="keyword parmname">Contract</span> resource for a participant who
+opts-out:</p>
+<pre class="codeblock"><code>{"resourceType" : "Contract",
+  "id": "c51c7041-316e-4129-95ee-e9dc09fa3eca", 
+  "identifier" : [{"system" : "www.ibm.com/watsonhealth/fhir/extension/teva/r1/</code></pre><pre class="codeblock"><code>developmentID","value" : "hachi@jp.ibm.com"}],
+  "issued" : "2016-06-22T00:47:00-04:00",
+  "applies" : {"start": "2016-06-22T00:49:00-04:00","end": "2026-06-22T00:49:00-04:00"},
+  "term": [{"action": 
+             [{"coding": 
+                [{"system": "http://www.hl7.org/fhir/v2/0498","code": "R"}],
+                  <strong><span class="keyword parmname">"text": "Withdrawn"</span></strong>
+             }]
+           }], "extension": [
+      {"url": "http://www.ibm.com/watsonhealth/fhir/extensions/whc-lsf/1.0/studyid",</code></pre><pre class="codeblock"><code>"valueString": "&lt;&lt;STUDY_ID&gt;&gt;"},
+      {"url": "http://www.ibm.com/watsonhealth/fhir/extensions/whc-lsf/1.0/siteid",</code></pre><pre class="codeblock"><code>"valueString": "&lt;&lt;SITE_ID&gt;&gt;"},
+      {"url" : "http://www.ibm.com/watsonhealth/fhir/extensions/whc-lsf/1.0/patientid",</code></pre><pre class="codeblock"><code>"valueString" : "&lt;&lt;PATIENT_ID&gt;&gt;"}
+   ]
+}</code></pre></dd>
+
+
+
+<dt class="dlterm">Handle the response if PHI data is not ingested because the participant's consent is set to
+opt-out.</dt>
+
+<dd class="dlentry">If data is submitted but not ingested, your application should send a notification (message) to
+application users (and optionally the participant's client app) stating that the data was not
+ingested and why.</dd>
+
+
+</dl>
+
+<section class="section" role="region" aria-labelledby="d69e220" id="concept_zxs_x3z_p1b__section_mbs_kw1_t1b"><h2 class="sectiontitle" id="d69e220">A note about consent enforcement</h2>
+
+<p>Your application does not handle consent enforcement. Consent enforcement is handled internally.
+The persistence layer that underpins the FHIR server (web application) performs consent management
+and enforcement in the storage of consent and resources subject to consent. </p>
+
+<p><dfn class="term">Study</dfn> and <dfn class="term">site</dfn> are mapped to a Consent manager purpose. User
+subscription to such a purpose represents consent for sharing all the data with the purpose. </p>
+
+<p>The user consent to share their data (for a given clinical study) is ingested through a
+FHIR-based Contract resource and is subsequently registered with Consent manager.</p>
+
+<p>During user enrollment (for example, for Input users) the system captures consent information and
+adds write access for the specific Consent manager purpose (for example, clinical study) that the
+user is enrolling in and consequently subscribed to in Consent manager.</p>
+
+<p>The user consent (to share their data) is registered within Consent manager by calling the
+Consent manager data usage approval API. An enforcement point authorizes user access (for analyst
+users, for example) and calls the Consent manager API to obtain data access approval for a specific
+purpose. If access is approved, the enforcement point can expose user data. Consent is enforced on
+both on ingestion (POST) and retrieval (GET) API operations.</p>
+
+<p>For example, given a participant (Patient12345), a study (Study14321), and a site (Site19876),
+the FHIR server processes an incoming request (for example, a <code class="ph codeph">POST</code> request of the
+<strong><span class="keyword parmname">MedicationAdministration</span></strong> resource). The FHIR service maps the
+<code class="ph codeph">Study</code> ID and <code class="ph codeph">Site</code> ID to uniquely identify (and interact with) the
+associated purpose that is registered with the Consent Manager service. The FHIR service calls the
+Consent manager to determine whether a specific participant consented to share their PHI data in the
+context of a specific study. The FHIR service ingests the PHI data only if the participant's consent
+status is set to 'opt-in' for the purpose.</p>
+
+<p>Only <span class="keyword cmdname">write</span> access to a user's data is revoked if the user opts out from the
+specified purpose.</p>
+
+</section>
+
+<section class="section" role="region" aria-labelledby="d69e268"><h2 class="sectiontitle" id="d69e268">Guardianship</h2><p>The solution provides an endpoint where a minor patient's
+consent can be given by a legal guardian, indicated by a specific field. In this case, an end date
+needs to be supplied. The legal guardian information is returned when the minor patient's consent is
+retrieved. </p>
+You can to create a consent object when you supply the <code class="ph codeph">consent_by
+param</code> parameter. When you receive this consent back (by ID), the return object contains the
+supplied <code class="ph codeph">consent_by</code> value. Figure 1 shows consent parameters and end date.<div class="p"><img src="userImages/GuardianShip_ex.jpg" alt="Guadianship consent_by and end_data parameters"><figure class="fignone" id="concept_zxs_x3z_p1b__fig_qty_z5m_5bb"><figcaption>Figure 1. Guardianship consent and end date</figcaption>
+
+</figure>
+</div>
+</section>
+
+<section class="section" role="region" aria-labelledby="d69e290"><h2 class="sectiontitle" id="d69e290">Geographical requirements</h2>
+
+<p>The age that denotes a person is a "minor" varies by geographical area.
+<span class="ph uicontrol">minor_age</span> indicates the age until which a person is considered a minor by law
+in that geographical area. The component has an API that indicates the age until which a person is
+considered a minor by law in a specific geographical area. Create a <code class="ph codeph">geography</code> with
+the <span class="ph uicontrol">minor_age</span> field filled. Retrieving the <code class="ph codeph">geography</code> (by ID)
+- returns the supplied <code class="ph codeph">minor_age</code> value.</p>
+
+<div class="p"><img src="userImages/minorAgeGeography.jpg" width="250" alt="minor age by geography"><figure class="fignone" id="concept_zxs_x3z_p1b__fig_vmt_l4d_1db"><figcaption>Figure 2. Minor age by geographical area</figcaption></figure>
+</div>
+
+</section>
+
+<section class="section" role="region" aria-labelledby="d69e320"><h2 class="sectiontitle" id="d69e320">Terms and conditions</h2>
+
+<p>Consent manager provides an endpoint where the terms and conditions of a purpose can be related. </p>
+
+<p>Create a purpose with the <span class="ph uicontrol">legal_terms</span> field filled. Retain the returned
+purpose identification. Retrieve the purpose by using its identification and verify the
+<span class="ph uicontrol">legal_terms</span> field.</p>
+
+<div class="p"><img src="userImages/Terms_conditions.jpg" width="400" alt="legal_terms parameter example"><figure class="fignone" id="concept_zxs_x3z_p1b__fig_qtp_nxh_5bb"><figcaption>Figure 3. Consent purpose terms and conditions</figcaption>
+
+</figure>
+</div>
+
+</section>
+
+<section class="section" role="region" aria-labelledby="d69e346"><h2 class="sectiontitle" id="d69e346">Purpose states and versioning support</h2>
+
+<p>When a purpose is first created, it is set to <code class="ph codeph">draft</code> state and version
+<code class="ph codeph">1</code>. The purpose can be edited freely by using the <code class="ph codeph">PATCH</code> method.
+When a purpose is active, a new version of it can be created by using the <code class="ph codeph">PUT</code> API.
+When you create a new version of an active purpose, the new version is automatically set as the
+previous version "+1," in a <code class="ph codeph">draft</code> state. The previous active version is left as-is
+and is used normally. However, when the new version of the active purpose is activated, the previous
+active version expires and can no longer be used to gather consent or request access to data.
+Consent that was given to the previous version is marked as requiring renewal. </p>
+
+
+<div class="tablenoborder"><table summary="" id="concept_zxs_x3z_p1b__table_vz1_wd3_5bb" class="defaultstyle"><caption><span class="tablecap">Table 1. Consent purpose states by ID</span></caption><colgroup></colgroup><thead style="text-align:left;">
+<tr>
+<th id="d69e382">ID</th>
+
+<th id="d69e385">State</th>
+
+</tr>
+
+</thead>
+<tbody>
+<tr>
+<td headers="d69e382 ">0</td>
+
+<td headers="d69e385 ">draft</td>
+
+</tr>
+
+<tr>
+<td headers="d69e382 ">1</td>
+
+<td headers="d69e385 ">active</td>
+
+</tr>
+
+<tr>
+<td headers="d69e382 ">2</td>
+
+<td headers="d69e385 ">canceled</td>
+
+</tr>
+
+<tr>
+<td headers="d69e382 ">3</td>
+
+<td headers="d69e385 ">expired</td>
+
+</tr>
+
+</tbody>
+</table>
+</div>
+
+<div class="div"><strong>Consent versioning</strong></div>
+<p>When you create consent, it is set to active, <code class="ph codeph">consent_version=1</code>. You can check
+the version of a patient's consent by using the patient's consent ID. You can update a patient's
+consent (using the <code class="ph codeph">PATCH</code> command). For example, change the
+<code class="ph codeph">end_date</code> field. Then retrieve it again - <code class="ph codeph">consent_version=1</code> is
+returned.</p>
+
+</section>
+
+<section class="section" role="region" aria-labelledby="d69e453"><h2 class="sectiontitle" id="d69e453">Available APIs</h2>
+
+<div class="p">All API references are relative paths. Watson Health recommends API references stem from the base
+Consent manager URL:<pre class="codeblock"><code>https://{hostname}:{port}/cm/2</code></pre>For example,
+<pre class="codeblock"><code>https://consentmanager.watson-health.net/cm/2</code></pre></div>
+
+</section>
+
+<section class="section" role="region" aria-labelledby="d69e467"><h2 class="sectiontitle" id="d69e467">Headers</h2>
+
+<div class="p">All requests to the consent manager must include the following headers:<ul>
+<li><code class="ph codeph">org</code> (tenant name)</li>
+
+<li><code class="ph codeph">password</code> (tenant password)</li>
+
+</ul>
+</div>
+
+</section>
+
+<section class="section" role="region" aria-labelledby="d69e488"><h2 class="sectiontitle" id="d69e488">Body</h2>
+
+<p>All requests that include a body (<code class="ph codeph">POST</code> and <code class="ph codeph">PATCH</code>) must also
+include the following header:</p>
+
+<ul>
+<li>Content-Type: application/json</li>
+
+</ul>
+
+<p>IBM Watson Health recommends that operations, which require administrative privileges contain the
+administrative tenant name <code class="ph codeph">org</code> and <code class="ph codeph">password</code>. For any other
+operation, the operations be the specific tenant’s organization and password (which are set up by an
+administrator).</p>
+
+</section>
+
+<section class="section" role="region" aria-labelledby="d69e519"><h2 class="sectiontitle" id="d69e519">Consent manager APIs</h2>
+
+<p>FHIR Server first passes the correlation ID and the external user ID to the Data management
+orchestrator (DMO). Certain interactions also require the FHIR server to pass the study and site IDs
+to DMO. All DMO interactions then take place. </p>
+
+<div class="p">
+<ul>
+<li>Successful <code class="ph codeph">GET</code> and <code class="ph codeph">POST</code> calls return a <code class="ph codeph">200</code>
+code (OK).</li>
+
+<li>Successful <code class="ph codeph">PATCH</code> and <code class="ph codeph">DELETE</code> calls return a
+<code class="ph codeph">204</code> code (no content).</li>
+
+<li>Unsuccessful calls return the relevant error code according to the type of error (<code class="ph codeph">400
+Bad Request</code>, <code class="ph codeph">403 Forbidden</code>, <code class="ph codeph">404 Not Found</code>, <code class="ph codeph">409
+Conflict</code>, <code class="ph codeph">422 Unprocessable</code>, or <code class="ph codeph">500 Internal Server
+Error</code>).</li>
+
+</ul>
+
+
+<div class="tablenoborder"><table summary="" id="concept_zxs_x3z_p1b__table_hks_2mf_wcb" class="defaultstyle"><caption><span class="tablecap">Table 2. Consent manager API Parameters</span></caption><colgroup></colgroup><thead style="text-align:left;">
+<tr>
+<th id="d69e598">API name</th>
+
+<th id="d69e601">Operation</th>
+
+<th id="d69e604">Description</th>
+
+<th id="d69e607">Parameters</th>
+
+<th id="d69e610">Type</th>
+
+</tr>
+
+</thead>
+<tbody>
+<tr>
+<td headers="d69e598 ">createConsent</td>
+
+<td headers="d69e601 ">POST</td>
+
+<td headers="d69e604 ">Post new tenant information - allowed only for admins.</td>
+
+<td headers="d69e607 ">
+<pre class="codeblock"><code>{
+"name": "string",
+"password": "string"
+}</code></pre>
+</td>
+
+<td headers="d69e610 ">
+<pre class="codeblock"><code>{
+"id": 0
+}</code></pre>
+</td>
+
+</tr>
+
+<tr>
+<td headers="d69e598 ">/types/{type}</td>
+
+<td headers="d69e601 ">POST</td>
+
+<td headers="d69e604 ">Post new type information.</td>
+
+<td headers="d69e607 ">
+<pre class="codeblock"><code>{
+ "id": 0,
+ "name": "string"
+}</code></pre>
+</td>
+
+<td headers="d69e610 ">
+<pre class="codeblock"><code>{
+"id": 0
+}</code></pre>
+</td>
+
+</tr>
+
+<tr>
+<td headers="d69e598 ">/purposes</td>
+
+<td headers="d69e601 ">POST</td>
+
+<td headers="d69e604 ">Create new purpose. Watson Health recommends you keep this generated token for use in future
+data usage approval calls.</td>
+
+<td headers="d69e607 ">
+<pre class="codeblock"><code>{
+"id": 0,
+"name": "string",
+"version": 0,
+"type": 0,
+"default_consent_duration": 0,
+"description": "string",
+"geography": 0,
+"legal_terms": "string",
+"privacy_officer_id": "string",
+"access_types": [
+{
+"id": 0
+}
+],
+"data": [
+{
+"id": 0,
+"mandatory": true,
+"duration": 0,
+"obfuscation_method": 0,
+"access_types": [
+{
+"id": 0
+}
+]
+}
+],
+"attributes": [
+{
+"name": "string",
+"value": "string"
+}
+]
+}</code></pre>
+</td>
+
+<td headers="d69e610 ">
+<pre class="codeblock"><code>{
+ "id": 0,
+"token": "string"
+}</code></pre>
+</td>
+
+</tr>
+
+<tr>
+<td headers="d69e598 ">/consenters</td>
+
+<td headers="d69e601 ">POST</td>
+
+<td headers="d69e604 ">Create new consenter (user who provided their consent) information.</td>
+
+<td headers="d69e607 ">
+<pre class="codeblock"><code>{
+"id": "string",
+"name": "string",
+"type": 0,
+"birth_date": "string",
+"gender": "string",
+"street": "string",
+"city": "string",
+"zip_code": "string",
+"state": "string",
+"country": "string",
+"phone": "string",
+"email": "string"
+}</code></pre>
+</td>
+
+<td headers="d69e610 ">
+<pre class="codeblock"><code>{
+ "id": "string"
+}</code></pre>
+</td>
+
+</tr>
+
+<tr>
+<td headers="d69e598 ">/consents</td>
+
+<td headers="d69e601 ">POST</td>
+
+<td headers="d69e604 ">Create new consent information.</td>
+
+<td headers="d69e607 ">
+<pre class="codeblock"><code>{
+"consenter_id": "string",
+"purpose_id": 0,
+"start_date": "string",
+"end_date": "string",
+"consent_by": "string",
+"written_authorization": true,
+"access_types": [
+{
+"id": 0
+}
+],
+"attributes": [
+{
+"name": "string",
+"value": "string"
+}
+],
+"data": [
+{
+"id": 0,
+"obfuscation_method": 0,
+"access_types": [
+{
+"id": 0
+}
+]
+}
+]
+}</code></pre>
+</td>
+
+<td headers="d69e610 ">
+<pre class="codeblock"><code>{
+"id": 0
+}</code></pre>
+</td>
+
+</tr>
+
+<tr>
+<td headers="d69e598 ">/consents/{id}</td>
+
+<td headers="d69e601 ">PATCH</td>
+
+<td headers="d69e604 ">Update consent by its ID. Use <code class="ph codeph">null</code> to remove a field and
+<code class="ph codeph">-id</code> to remove an array element.</td>
+
+<td headers="d69e607 ">
+<pre class="codeblock"><code>{
+"purpose_version": 0,
+"start_date": "string",
+"end_date": "string",
+"consent_version": 0,
+"consent_by": "string",
+"written_authorization": true,
+"access_types": [
+{
+"id": 0
+}
+],
+"attributes": [
+{
+"id": 0,
+"name": "string",
+"value": "string"
+}
+],
+"data": [
+{
+"id": 0,
+"obfuscation_method": 0,
+"access_types": [
+{
+"id": 0
+}
+]
+}
+]
+}</code></pre>
+</td>
+
+<td headers="d69e610 ">N/A</td>
+
+</tr>
+
+<tr>
+<td headers="d69e598 ">/data_usage_approval</td>
+
+<td headers="d69e601 ">POST</td>
+
+<td headers="d69e604 ">Access approval information. For example, policy, purpose and data level.</td>
+
+<td headers="d69e607 ">
+<pre class="codeblock"><code>{
+"purpose_id": 0,
+"access_type_id": 0,
+"subjects": [
+{
+"id": "string"
+}
+],
+"data": [
+{
+"data_location": {
+"type": 0,
+"field": "string",
+"object": "string",
+"schema": "string"
+},
+"originator": "string"
+}
+],
+"token": "string",
+"geography": 0,
+"request_context": {}
+}</code></pre>
+</td>
+
+<td headers="d69e610 ">
+<pre class="codeblock"><code>{
+"purpose": 0,
+"access_type": 0,
+"results": [
+{
+"consenter": "string",
+"data": [
+{
+"access": {
+"approved": true,
+"conditional": true,
+"reason": "string"
+},
+"data": {
+"location": {
+"type": 0,
+"object": "string",
+"field": "string",
+"schema": "string"
+}
+},
+"obfuscation": {
+"required": true,
+"method": 0
+}
+}
+]
+}
+]
+}</code></pre>
+</td>
+
+</tr>
+
+<tr>
+<td headers="d69e598 ">/geographies</td>
+
+<td headers="d69e601 ">GET</td>
+
+<td headers="d69e604 ">Get geographies</td>
+
+<td headers="d69e607 ">
+<ul>
+<li>offset - Page number. Starts from 0.</li>
+
+<li>limit - Page size. Maximum page size is set in configuration.</li>
+
+</ul>
+
+</td>
+
+<td headers="d69e610 ">
+<pre class="codeblock"><code>{
+"results": [
+{
+"id": 0,
+"name": "string",
+"type": 0,
+"parent": 0
+}
+],
+"offset": 0,
+"limit": 0,
+"total": 0
+}</code></pre>
+</td>
+
+</tr>
+
+<tr>
+<td headers="d69e598 ">/audittrail-retrieve/v1/audit-trail</td>
+
+<td headers="d69e601 ">GET</td>
+
+<td headers="d69e604 ">Get all storage events that occurred.</td>
+
+<td headers="d69e607 ">
+<ul>
+<li>fromWhen - The start time stamp of audit trail. Required only for the first page request.</li>
+
+<li>fromSeqId - Required for subsequent page requests. Indicates the sequence ID of the audit trail
+record from which the page starts.</li>
+
+<li>toWhen - Required. The time stamp end of the audit trail.</li>
+
+<li>pageSize - Required. The number of audit trail records to be returned.</li>
+
+<li>userId - Optional. The audit trail records are filtered by the authenticated user who initiated
+the record change.</li>
+
+<li>patientId - Optional. The audit trail records are filtered by the patient ID. If the audit trail
+record does not have an associated patient ID, then that record is filtered out.</li>
+
+<li>includeDataDetails - Optional. Whether the audit trail records include additional details on the
+data changed. Default value is false.</li>
+
+</ul>
+
+</td>
+
+<td headers="d69e610 ">
+<pre class="codeblock"><code>{
+"records": [
+{
+ "events": [
+{
+"event": "string",
+"fieldName": "string",
+"newValue": "string",
+"oldValue": "string"
+}
+]
+}
+]
+}</code></pre>
+</td>
+
+</tr>
+
+</tbody>
+</table>
+</div>
+
+</div>
+
+
+<div class="tablenoborder"><table summary="" id="concept_zxs_x3z_p1b__table_nnz_tyh_sbb" class="defaultstyle"><caption><span class="tablecap">Table 3. Consent manager API Parameters</span></caption><colgroup></colgroup><thead style="text-align:left;">
+<tr>
+<th id="d69e891">Resource</th>
+
+<th id="d69e894">Operation</th>
+
+<th id="d69e897">Description</th>
+
+<th id="d69e900">Request body</th>
+
+<th id="d69e903">Response body</th>
+
+</tr>
+
+</thead>
+<tbody>
+<tr>
+<td headers="d69e891 ">/tenants</td>
+
+<td headers="d69e894 ">POST</td>
+
+<td headers="d69e897 ">Post new tenant information - allowed only for admins.</td>
+
+<td headers="d69e900 ">
+<pre class="codeblock"><code>{
+"name": "string",
+"password": "string"
+}</code></pre>
+</td>
+
+<td headers="d69e903 ">
+<pre class="codeblock"><code>{
+"id": 0
+}</code></pre>
+</td>
+
+</tr>
+
+<tr>
+<td headers="d69e891 ">/types/{type}</td>
+
+<td headers="d69e894 ">POST</td>
+
+<td headers="d69e897 ">Post new type information.</td>
+
+<td headers="d69e900 ">
+<pre class="codeblock"><code>{
+ "id": 0,
+ "name": "string"
+}</code></pre>
+</td>
+
+<td headers="d69e903 ">
+<pre class="codeblock"><code>{
+"id": 0
+}</code></pre>
+</td>
+
+</tr>
+
+<tr>
+<td headers="d69e891 ">/purposes</td>
+
+<td headers="d69e894 ">POST</td>
+
+<td headers="d69e897 ">Create new purpose. Keep this generated token for use in future data usage approval
+calls.</td>
+
+<td headers="d69e900 ">
+<pre class="codeblock"><code>{
+"id": 0,
+"name": "string",
+"version": 0,
+"type": 0,
+"default_consent_duration": 0,
+"description": "string",
+"geography": 0,
+"legal_terms": "string",
+"privacy_officer_id": "string",
+"access_types": [
+{
+"id": 0
+}
+],
+"data": [
+{
+"id": 0,
+"mandatory": true,
+"duration": 0,
+"obfuscation_method": 0,
+"access_types": [
+{
+"id": 0
+}
+]
+}
+],
+"attributes": [
+{
+"name": "string",
+"value": "string"
+}
+]
+}</code></pre>
+</td>
+
+<td headers="d69e903 ">
+<pre class="codeblock"><code>{
+ "id": 0,
+"token": "string"
+}</code></pre>
+</td>
+
+</tr>
+
+<tr>
+<td headers="d69e891 ">/consenters</td>
+
+<td headers="d69e894 ">POST</td>
+
+<td headers="d69e897 ">Create new consenter information.</td>
+
+<td headers="d69e900 ">
+<pre class="codeblock"><code>{
+"id": "string",
+"name": "string",
+"type": 0,
+"birth_date": "string",
+"gender": "string",
+"street": "string",
+"city": "string",
+"zip_code": "string",
+"state": "string",
+"country": "string",
+"phone": "string",
+"email": "string"
+}</code></pre>
+</td>
+
+<td headers="d69e903 ">
+<pre class="codeblock"><code>{
+ "id": "string"
+}</code></pre>
+</td>
+
+</tr>
+
+<tr>
+<td headers="d69e891 ">/consents</td>
+
+<td headers="d69e894 ">POST</td>
+
+<td headers="d69e897 ">Create new consent information.</td>
+
+<td headers="d69e900 ">
+<pre class="codeblock"><code>{
+"consenter_id": "string",
+"purpose_id": 0,
+"start_date": "string",
+"end_date": "string",
+"consent_by": "string",
+"written_authorization": true,
+"access_types": [
+{
+"id": 0
+}
+],
+"attributes": [
+{
+"name": "string",
+"value": "string"
+}
+],
+"data": [
+{
+"id": 0,
+"obfuscation_method": 0,
+"access_types": [
+{
+"id": 0
+}
+]
+}
+]
+}</code></pre>
+</td>
+
+<td headers="d69e903 ">
+<pre class="codeblock"><code>{
+"id": 0
+}</code></pre>
+</td>
+
+</tr>
+
+<tr>
+<td headers="d69e891 ">/consents/{id}</td>
+
+<td headers="d69e894 ">PATCH</td>
+
+<td headers="d69e897 ">Update consent by its ID. Use <code class="ph codeph">null</code> to remove a field and
+<code class="ph codeph">-id</code> to remove an array element.</td>
+
+<td headers="d69e900 ">
+<pre class="codeblock"><code>{
+"purpose_version": 0,
+"start_date": "string",
+"end_date": "string",
+"consent_version": 0,
+"consent_by": "string",
+"written_authorization": true,
+"access_types": [
+{
+"id": 0
+}
+],
+"attributes": [
+{
+"id": 0,
+"name": "string",
+"value": "string"
+}
+],
+"data": [
+{
+"id": 0,
+"obfuscation_method": 0,
+"access_types": [
+{
+"id": 0
+}
+]
+}
+]
+}</code></pre>
+</td>
+
+<td headers="d69e903 ">N/A</td>
+
+</tr>
+
+<tr>
+<td headers="d69e891 ">/data_usage_approval</td>
+
+<td headers="d69e894 ">POST</td>
+
+<td headers="d69e897 ">Access approval information. For example, policy, purpose and data level.</td>
+
+<td headers="d69e900 ">
+<pre class="codeblock"><code>{
+"purpose_id": 0,
+"access_type_id": 0,
+"subjects": [
+{
+"id": "string"
+}
+],
+"data": [
+{
+"data_location": {
+"type": 0,
+"field": "string",
+"object": "string",
+"schema": "string"
+},
+"originator": "string"
+}
+],
+"token": "string",
+"geography": 0,
+"request_context": {}
+}</code></pre>
+</td>
+
+<td headers="d69e903 ">
+<pre class="codeblock"><code>{
+"purpose": 0,
+"access_type": 0,
+"results": [
+{
+"consenter": "string",
+"data": [
+{
+"access": {
+"approved": true,
+"conditional": true,
+"reason": "string"
+},
+"data": {
+"location": {
+"type": 0,
+"object": "string",
+"field": "string",
+"schema": "string"
+}
+},
+"obfuscation": {
+"required": true,
+"method": 0
+}
+}
+]
+}
+]
+}</code></pre>
+</td>
+
+</tr>
+
+<tr>
+<td headers="d69e891 ">/geographies</td>
+
+<td headers="d69e894 ">GET</td>
+
+<td headers="d69e897 ">Get geographies</td>
+
+<td headers="d69e900 ">
+<ul>
+<li>offset - Page number. Starts from 0.</li>
+
+<li>limit - Page size. - Maximum page size is set in configuration.</li>
+
+</ul>
+
+</td>
+
+<td headers="d69e903 ">
+<pre class="codeblock"><code>{
+"results": [
+{
+"id": 0,
+"name": "string",
+"type": 0,
+"parent": 0
+}
+],
+"offset": 0,
+"limit": 0,
+"total": 0
+}</code></pre>
+</td>
+
+</tr>
+
+<tr>
+<td headers="d69e891 ">/audittrail-retrieve/v1/audit-trail</td>
+
+<td headers="d69e894 ">GET</td>
+
+<td headers="d69e897 ">Get all storage events that occurred.</td>
+
+<td headers="d69e900 ">
+<ul>
+<li>fromWhen - The start time stamp of audit trail. Required only for the first page request.</li>
+
+<li>fromSeqId - Required for the subsequent page requests. Indicates the sequence ID of the audit
+trail record from which the page should start.</li>
+
+<li>toWhen - Required. The time stamp end of the audit trail.</li>
+
+<li>pageSize - Required. The number of audit trail records to be returned.</li>
+
+<li>userId - Optional. Filters audit trail records by the authenticated user that initiated the
+record change.</li>
+
+<li>patientId - Optional. Filters audit trail records by the patient ID. If the audit trail record
+does not have an associated patient ID, then that record is filtered out.</li>
+
+<li>includeDataDetails - Optional. Includes additional details on the data changed in the audit
+trail records. Default value is <code class="ph codeph">false</code>.</li>
+
+</ul>
+
+</td>
+
+<td headers="d69e903 ">
+<pre class="codeblock"><code>{
+"records": [
+{
+ "events": [
+{
+"event": "string",
+"fieldName": "string",
+"newValue": "string",
+"oldValue": "string"
+}
+]
+}
+]
+}</code></pre>
+</td>
+
+</tr>
+
+</tbody>
+</table>
+</div>
+
+</section>
+
+</div>
+
+<aside role="complementary" aria-labelledby="d69e10"><nav role="navigation">
+<div class="linklist relinfo"><h1 class="linklistlabel">Related information</h1>
+<ul><li><img src="sout.gif" alt=""><a href="https://www.hl7.org/fhir/" rel="external" target="_blank" title="(Opens in a new tab or window)">HL7 FHIR</a></li>
+<li><img src="sout.gif" alt=""><a href="http://www.hl7.org/fhir/DSTU2/contract-definitions.html" rel="external" target="_blank" title="(Opens in a new tab or window)">HL7 FHIR contract resource element definitions</a></li>
+<li><img src="sout.gif" alt=""><a href="http://www.ringholm.com/docs/04350_mapping_HL7v2_FHIR.htm" rel="external" target="_blank" title="(Opens in a new tab or window)">HL7 Message examples: version 2 and FHIR</a></li>
+</ul></div>
+</nav></aside>
+</article></main></body></html>

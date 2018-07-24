@@ -1,0 +1,166 @@
+<!DOCTYPE html><html lang="en-us">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+
+<meta name="dcterms.rights" content="© Copyright IBM Corporation 2018">
+
+
+
+<meta name="description" content="Watson™ Platform for Health GxP captures data subjects' consent for their data to be used for specific purposes such as clinical studies. The platform securely stores a record of participant consent apart from the data payload.">
+
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "en-us",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><!-- Licensed Materials - Property of IBM -->
+<!-- US Government Users Restricted Rights -->
+<!-- Use, duplication or disclosure restricted by -->
+<!-- GSA ADP Schedule Contract with IBM Corp. -->
+<link rel="stylesheet" type="text/css" href="ibmdita.css">
+<title>Consent manager</title>
+</head>
+<body id="concept_wln_mzw_4bb"><main role="main"><article role="article" aria-labelledby="d69e10">
+<h1 class="topictitle1" id="d69e10">Consent manager</h1>
+
+
+
+
+
+<div class="body conbody"><p class="shortdesc"><span class="keyword">Watson™ Platform for Health GxP</span> captures data subjects'
+<dfn class="term">consent</dfn> for their data to be used for specific purposes such as clinical studies. The
+platform securely stores a record of participant consent apart from the data payload.</p>
+
+<p>The Consent Manager service supports the following capabilities:</p>
+
+<ul>
+<li>Consent management and consent enforcement to support purpose-based consent to protected health
+information (PHI) and to comply with regulatory requirements.</li>
+
+<li>Consent management and consent enforcement to support role-based consent, relationship-based
+consent, and named-based consent to patient data and to comply with regulatory requirements.</li>
+
+<li>Guardian consent to support minors or incapacitated patients.</li>
+
+<li>Consent version support.</li>
+
+<li>Indicating the age until which a person is considered a minor by law, as specified by
+geographical area.</li>
+
+<li>Attaching <dfn class="term">terms and conditions</dfn> to a consented purpose.</li>
+
+<li>Audit trail records generation for Part 11 support.</li>
+
+</ul>
+
+<p><span class="keyword">Watson Platform for Health GxP</span> provides consent capture to a
+specific purpose, such as a cancer study, and enables the sharing and retrieval of consented data.
+PHI disclosure is protected by the enforcement of the laws, regulations, and policies for patient
+consents and sensitive information, including HIPAA.</p>
+
+<section class="section" role="region" aria-labelledby="d69e61" id="concept_wln_mzw_4bb__section_xkz_3mm_tcb"><h2 class="sectiontitle" id="d69e61">Roles, relationships, and consent</h2>
+
+<p> Before the platform checks for data subject consent, it first checks the role of the user
+requests PHI. The user who requests to read or ingest PHI data must be granted a <dfn class="term">role</dfn>
+that is associated with the consented purpose. Roles and relationships are managed and stored by the
+<a href="wp4h_gxp_r_rram.html" title="The Role and Relationship Access Manager service provides access to patient health data in combination with other platform services based on the role and the relationship of the user who requests the data.">Role and Relationship Access Manager
+service</a>.</p>
+
+<p><span class="keyword">Watson Platform for Health GxP</span> enforces data subject consent
+within the platform. For example, before participants can submit their PHI data, they must "opt-in"
+to share their data for a specific <dfn class="term">purpose</dfn>. For example, if a study participant (data
+subject) opts in to an Asthma study, the participating individual agrees to share their PHI data for
+only the purpose of the Asthma study. Only the study researchers that are involved in the asthma
+study can access the PHI data the participants consented to share. In the current <span class="keyword">Watson Platform for Health GxP</span> release, Consent management supports Opt-in
+and Opt-out consent models.</p>
+
+<p>Within <span class="keyword">Watson Platform for Health GxP</span>, consented data is
+stored in the data lake, as illustrated in Figure 1. After consented data is stored in the data
+lake, it can then be curated, de-identified, and stored in the data reservoir. Data scientists then
+use data subjects' health data to create predictive and prescriptive analytic models.</p>
+
+<div class="p"><img id="concept_wln_mzw_4bb__image_z2b_kmm_tcb" src="userImages/WP4H_cm.jpg" width="625" alt="Consent management in the Watson Platform for Health GxP"><figure class="fignone" id="concept_wln_mzw_4bb__fig_f3x_dfj_hbb"><figcaption>Figure 1. Consent management in <span class="keyword">Watson Platform for Health GxP</span></figcaption>
+
+</figure>
+</div>
+
+</section>
+
+<section class="section" role="region" aria-labelledby="d69e111" id="concept_wln_mzw_4bb__section_kxp_pqw_qcb"><h2 class="sectiontitle" id="d69e111">Consent manager components</h2>
+
+<div class="p">When you envision the Consent Manager service, it is useful to understand where the service lives
+and where it stores a patient's consent information. The Consent Manager service is composed of
+three items:<dl>
+
+<dt class="dlterm">Consent manager application server</dt>
+
+<dd class="dlentry">Hosts the Consent manager API and Audit API.</dd>
+
+
+
+<dt class="dlterm">Consent database</dt>
+
+<dd class="dlentry">Stores consent information.</dd>
+
+
+</dl>
+<dl>
+
+<dt class="dlterm">Trail records database</dt>
+
+<dd class="dlentry">Stores audit trail records, access logs, purpose, and consent history.</dd>
+
+
+</dl>
+</div>
+
+</section>
+
+<section class="section" role="region" aria-labelledby="d69e152" id="concept_wln_mzw_4bb__section_sps_tng_scb"><h2 class="sectiontitle" id="d69e152">Consent manager setup</h2>
+
+<p>As a tenant, or platform user, you set up patient consent by sending call operations by way of
+REST APIs. Later, the platform uses Consent manager to check whether a patient gave consent for a
+specific purpose, such as an asthma study. More context information, such as relationships, is
+provided by the <a href="wp4h_gxp_r_rram.html" title="The Role and Relationship Access Manager service provides access to patient health data in combination with other platform services based on the role and the relationship of the user who requests the data.">Role and Relationship Access
+Manager</a> service and is set up separately.</p>
+
+</section>
+
+<section class="section" role="region" aria-labelledby="d69e168" id="concept_wln_mzw_4bb__section_tlj_pnm_tcb"><h2 class="sectiontitle" id="d69e168">User opt-in process</h2>
+
+<p>Figure 2 shows the process flow that occurs between two platform services (FHIR and Consent
+manager) when a patient opts-in to a specific purpose (such as a cancer study). Data subjects and
+consent information are created within the platform by the FHIR service. When created, consent
+information is mapped to a purpose and stored in the Consent manager database.</p>
+
+<div class="p"><img id="concept_wln_mzw_4bb__image_mkt_dpg_scb" src="userImages/UserOptIn.jpg" width="550" alt="The user opt in process starts in FHIR within the platform. The patient is created within FHIR and his consent is created and stored in Consent manager."><figure class="fignone" id="concept_wln_mzw_4bb__fig_lnf_2pg_scb"><figcaption>Figure 2. Consent manager user opt-in</figcaption></figure>
+</div>
+
+</section>
+
+<section class="section" role="region" aria-labelledby="d69e183" id="concept_wln_mzw_4bb__section_nc2_52w_qcb"><h2 class="sectiontitle" id="d69e183">Consent enforcement</h2>
+
+<p>The platform enforces policies and patient consent by way of enforcement points wherever data is
+read or ingested into the platform. If a client-facing application checks a data subject's consent,
+the application sends an API request to the platform such as <code class="ph codeph">POST
+/data_usage_approval</code>.</p>
+
+<p>If the API request <code class="ph codeph">POST /data_usage_approval</code> is successful, a <code class="ph codeph">200
+OK</code> response is returned, with access approval information.</p>
+
+</section>
+
+</div>
+
+</article></main></body></html>
