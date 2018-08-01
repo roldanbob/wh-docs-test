@@ -24,7 +24,7 @@ Data Services are the heart of {{site.data.keyword.wh_prodname_long}}. Use Data 
 
 The {{site.data.keyword.wh_prodname_short}} is designed for flexibility. The following use cases can help you understand how you can use the {{site.data.keyword.wh_prodname_short}} FHIR data service to upload and search FHIR data.
 
-**Note:** The examples in this section contain generic URL endpoints, user names, and other parameters. When you create your own APIs, be sure to replace any generic text with the correct parameters for your site.
+**Note:** The examples in this section contain generic URL endpoints, user names, and other parameters. When you invoke an API, be sure to replace any generic text with the correct parameters for your site.
 
 ## Study design: Creating an asthma inhaler study
 <!-- {: #concept_d5b_djm_p1b__section_gfp_qpt_51b} -->
