@@ -7,7 +7,7 @@ lastupdated: "2018-07-17"
 ---
 
 {:shortdesc: .shortdesc}
-{:new_window: target="_blank"}
+{: new_window: target="_blank"}
 {:tip: .tip}
 {:pre: .pre}
 {:codeblock: .codeblock}
@@ -28,7 +28,7 @@ The {{site.data.keyword.wh_prodname_short}} is designed for flexibility. The fol
 
 ## Study design: Creating an asthma inhaler study
 <!-- {: #concept_d5b_djm_p1b__section_gfp_qpt_51b} -->
-A set of clinicians and research scientists want to create a study that is based on inhaler use by patients with asthma. The inhaler for this study is a connected device that produces a rich set of information each time it is used, including (but not limited to) the following data:
+A set of clinicians and research scientists want to create a study that examines how patients with asthma use their inhalers. Patients in the study use network-connected inhalers that automatically monitor and transmit a rich set of data with each use. The inhalers track the following information:
 
 - Patient ID
 - Inhaler ID
@@ -36,40 +36,39 @@ A set of clinicians and research scientists want to create a study that is based
 - Inhaler percentage (did the patient get the full suggested dosage?).
 - Time and date of use
 
-In addition, patients for this study wear fitness trackers that provide the following information:
+To deliver greater context for the inhaler data, patients in the study wear fitness trackers that record physiological data such as:
 
 - Heart rate
 - Blood pressure
 - Daily exercise details
 - Sleep records
 
-The study designers might also want, or need, the following information:
+To help researchers to understand other factors that might influence patient data, study designers might also collect information about historical and environmental factors, for example:
 
-- Practitioner ID (and other details).
+- Health practitioner IDs (and other details).
 - Patient details, such as address, age, and gender.
-- Patient Consent data, which ensures that patients have given explicit permission to use their data for this study.
+- Patient Consent data, which tracks whether patients grant explicit permission to use their data for this study.
 - Patient insurance and primary care physician information.
 - Patient medical details, such as family medical and social history, co-morbidities, or age at asthma diagnosis.
 - Patient lifestyle details, such as job, exercise history, dietary history, and substance abuse history
 - Daily weather details, such as temperature, smog (particulate matter), and relative humidity.
 - Data sets from previous studies.
 
-Data for use in this study (or set of studies) can come from various sources, such as:
+Researchers use a variety of formats and methods to collect different type of data. For example, study data might come from the following sources:
 
 - FHIR resources from the patient's inhaler and fitness tracker, a patient questionnaire, and weather observations.
 - HL7-formatted data from the patient's Electronic Health Record (EHR).
 - Image data from CT scans or x-rays.
 - Data in SAS data sets or CSV files that contains previously de-identified data from previous studies.
 
-During the study design phase, designers work with {{site.data.keyword.deptname_whc}} , data scientists, and other personnel to determine what data is	 needed for a study. Then, depending on the data source, use the FHIR server REST API, the {{site.data.keyword.prodname_dl}} REST API, or the {{site.data.keyword.prodname_dr}} REST API to upload and manage the data.
+During the study design phase, designers work with {{site.data.keyword.deptname_whc}}, data scientists, and other personnel to determine what data is	needed for a study. Then, depending on the data source, use the FHIR server REST API, the {{site.data.keyword.prodname_dl}} REST API, or the {{site.data.keyword.prodname_dr}} REST API to upload and manage the data.
 
 ## Use case 1: Adding FHIR data to the FHIR repository
 {: #concept_d5b_djm_p1b__fhir_usecase}
 
 After you design the study, you know which FHIR resources are needed. Use the FHIR Service APIs to add the resources to the FHIR server.
 
-For example, as part of your study, the patient generates data at least daily the following FHIR
-resources:
+For example, as part of your study, the patient generates data at least daily for the following FHIR resources:
 
 - MedicationAdministration
 - Observation
@@ -77,7 +76,7 @@ resources:
 
 <!--- For an example of uploading the MedicationAdministration FHIR resource to the FHIR repository, see the [FHIR POST example ](https://ibm.box.com/s/31p6aj3z42ror4k8om6jeukserl52a5k){: new_window}. --->
 
-The following sample POST command uploads the MedicationAdministration FHIR resource to the FHIR repository:
+The following sample POST command uploads the `MedicationAdministration` FHIR resource to the FHIR repository:
 
 ```
 curl -X POST \
@@ -163,15 +162,15 @@ curl -X POST \
     }
 ```
 
-For this example, keep the following information in mind that the MedicationAdministration resource includes a number of extensions to the standard MedicationAdministration resource described in the FHIR DSTU2 specification. For the sake of simplicity, only required extensions are shown. For more information about FHIR resources, see the [FHIR DSTU2 Resource list](http://hl7.org/fhir/DSTU2/resourcelist.html){: new_window}.
+The preceding example includes some extensions to the standard `MedicationAdministration` resource as described in the FHIR DSTU2 specification. For simplicity, we've included the required extensions only. For more information about FHIR resources, see the [FHIR DSTU2 Resource list](http://hl7.org/fhir/DSTU2/resourcelist.html){: new_window}.
 
-For all FHIR examples, the `client key` and `client cert` are the key and certificate files of the client application that is signed and issued by the {{site.data.keyword.prodgroupname_short}} Certificate Authority.
+For all FHIR examples, the `client key` and `client cert` are the key and certificate files of the client application that is signed and issued by the {{site.data.keyword.prodgroupname_short}} certificate authority.
 
-## Use case 2: Adding a FHIR Bundle to the FHIR repository
+## Use case 2: Adding an FHIR Bundle to the FHIR repository
 {: #concept_d5b_djm_p1b__section_pfy_r34_jbb}
 
-You can include multiple FHIR resources into a single transaction that is called a "Bundle."  
-The following sample POST command uploads the MedicicationAdministration, Observation, and QuestionnaireResponse FHIR resources as a bundle:
+Each FHIR transaction, known as a *bundle*, can include multiple FHIR resources.  
+The following sample POST command uploads a bundle comprised of the `MedicicationAdministration`, `Observation`, and `QuestionnaireResponse` FHIR resources:
 <!--- For example, to include the MedicicationAdministration, Observation, and QuestionnaireResponse FHIR resources as a bundle, see the [FHIR POST Bundle example](https://ibm.box.com/s/y1h3odopp6r8x3jepl5a6vl5pdhq3b6a){: new_window}. --->
 
 
