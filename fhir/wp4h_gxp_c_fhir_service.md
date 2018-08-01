@@ -15,7 +15,9 @@ lastupdated: "2018-07-17"
 {:javascript: .ph data-hd-programlang='javascript'}
 {:java: .ph data-hd-programlang='java'}
 {:python: .ph data-hd-programlang='python'}
-{:swift: .ph data-hd-programlang='swift'}
+{:swift: .ph data-hd-programlang='swift'} 
+
+---
 
 # FHIR service
 
@@ -28,8 +30,10 @@ Use the FHIR service to upload FHIR-formatted data into the FHIR repository. The
 When a patient enrolls in either a clinical or commercial study, {{site.data.keyword.wh_prodname_short}} takes the following steps to help ensure that the patient is properly enrolled:
 
 - The patient, or the patient's guardian, must grant permission (consent) for that patient's health information to be shared with user analysts and other personnel. For more information, see [Consent manager](/docs/services/DATA-SERVICES-FHIR/wp4h_gxp_c_consent_mgr.html).
-- Assign a role to the patient (and the guardian, if applicable) to help ensure that the data is correctly processed and that only authorized users can view this patient's information. For more information, see [{{site.data.keyword.prodname_rram_first}} ](/docs/services/DATA-SERVICES-FHIR/wp4h_gxp_r_rram.html). Note: Roles are assigned as defined by each client's business need for everyone who might view or manage any patient data, including practitioners, care managers, and administrators.
-- As data comes into the FHIR repository, Consent Manager and {{site.data.keyword.prodname_rram_first}} services perform additional checks to help ensure that consent, role, and relationship information are still valid.
+<!-- - Assign a role to the patient (and the guardian, if applicable) to help ensure that the data is correctly processed and that only authorized users can view this patient's information. For more information, see [{{site.data.keyword.prodname_rram_first}} ](/docs/services/DATA-SERVICES-FHIR/wp4h_gxp_r_rram.html). 
+
+  **Note:** Roles are assigned as defined by each client's business need for everyone who might view or manage any patient data, including practitioners, care managers, and administrators. -->
+- As data comes into the FHIR repository, Consent Manager <!-- and {{site.data.keyword.prodname_rram_first}} services perform --> performs additional checks to help ensure that consent <!-- , role, and relationship information are --> information is still valid. 
 
 [Figure 1](#wp4h_gxp_c_fhir_service__fig_hws_p2v_scb) provides an overview of how data flows from a customer application or device to the FHIR repository and then to the data replicator and data lake.
 
@@ -42,9 +46,9 @@ When a patient enrolls in either a clinical or commercial study, {{site.data.key
 1. From the FHIR data stores, all data is replicated by the replicator to help ensure high availability and data resiliency.
 
 ## FHIR resources and data stores
-{: #wp4h_gxp_c_fhir_service__section_nk3_tgv_scb}
+<!-- {: #wp4h_gxp_c_fhir_service__section_nk3_tgv_scb} -->
 
-For {{site.data.keyword.wh_prodname_short}} , the FHIR repository uses the following data stores: {: #wp4h_gxp_c_fhir_service__section_ylk_q4w_scb}
+For {{site.data.keyword.wh_prodname_short}} , the FHIR repository uses the following data stores: <!--  {: #wp4h_gxp_c_fhir_service__section_ylk_q4w_scb} -->
 
 - Each FHIR repository includes four study data stores. Clinical studies and commercial programs each have high- and low-volume data stores.
 
@@ -54,76 +58,77 @@ For {{site.data.keyword.wh_prodname_short}} , the FHIR repository uses the follo
 - Profile data contains the Patient FHIR resource and related information about the patient (that is, the patient's profile). To protect protected health information (PHI), the Patient resource cannot be accessed or used in predictive studies. However, data from the Profile data store can be used by the {{site.data.keyword.prodname_cro_dw}} service.
 - Reference data store (Low volume) - Contains reference information for studies. Reference FHIR resources include Group, Medication, Organization, Practitioner, Questionnaire, Virtual, and Binary resources. Virtual Resources can include custom and other data that is not forwarded to the data lake.
 
- As shown in [Table 1](#wp4h_gxp_c_fhir_service__table_ckk_scb_hbb), {{site.data.keyword.wh_prodname_short}} supports several resource types that are defined by the FHIR DSTU2 specification.
+### Supported FHIR resources
+As shown in [Table 1](#wp4h_gxp_c_fhir_service__table_ckk_scb_hbb), {{site.data.keyword.wh_prodname_short}} supports several resource types that are defined by the FHIR DSTU2 specification.
 
 <table id="wp4h_gxp_c_fhir_service__table_ckk_scb_hbb">
 <caption>Table 1. Supported FHIR resources</caption><colgroup></colgroup>
-<thead style="text-align:left;">
+<thead style="text-align:center; vertical-align:top">
 <tr>
-<th valign="top" id="d3380e172">FHIR Resource Type</th>
-<th valign="top" id="d3380e175">Meaning</th>
+<th id="d3380e172">FHIR Resource Type</th>
+<th id="d3380e175">Meaning</th>
 </tr>
 </thead>
-<tbody>
+<tbody style="vertical-align:top"; text-align:left">
 <tr>
-<td valign="top" headers="d3380e172">Binary</td>
-<td valign="top" headers="d3380e175">Binary information that is provided from documents such as PDFs or images.</td>
+<td headers="d3380e172">Binary</td>
+<td headers="d3380e175">Binary information that is provided from documents such as PDFs or images.</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e172">CarePlan</td>
-<td valign="top" headers="d3380e175">Patient care plan details.</td>
+<td headers="d3380e172">CarePlan</td>
+<td headers="d3380e175">Patient care plan details.</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e172">Communication</td>
-<td valign="top" headers="d3380e175">An invitation to join a study or program as a practitioner, patient, or
+<td headers="d3380e172">Communication</td>
+<td headers="d3380e175">An invitation to join a study or program as a practitioner, patient, or
 administrator.</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e172">Contract</td>
-<td valign="top" headers="d3380e175">Patient consent information.</td>
+<td headers="d3380e172">Contract</td>
+<td headers="d3380e175">Patient consent information.</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e172">Device</td>
-<td valign="top" headers="d3380e175">A device that supports input such as a smartphone or computer, or a medical device such as an
+<td headers="d3380e172">Device</td>
+<td headers="d3380e175">A device that supports input such as a smartphone or computer, or a medical device such as an
 inhaler or glucose monitor.</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e172">DeviceComponent</td>
-<td valign="top" headers="d3380e175">A mobile application on a device.</td>
+<td headers="d3380e172">DeviceComponent</td>
+<td headers="d3380e175">A mobile application on a device.</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e172">DeviceMetric</td>
-<td valign="top" headers="d3380e175">Quantitative or qualitative device measurements or status. User assigned.</td>
+<td headers="d3380e172">DeviceMetric</td>
+<td headers="d3380e175">Quantitative or qualitative device measurements or status. User assigned.</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e172">Group</td>
-<td valign="top" headers="d3380e175">A Research Study group or Research Study definition.</td>
+<td headers="d3380e172">Group</td>
+<td headers="d3380e175">A Research Study group or Research Study definition.</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e172">Location</td>
-<td valign="top" headers="d3380e175">The residential location of a patient, guardian, or practitioner. Required to help ensure
+<td headers="d3380e172">Location</td>
+<td headers="d3380e175">The residential location of a patient, guardian, or practitioner. Required to help ensure
 privacy and consent rules for a country or other region.</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e172">Medication</td>
-<td valign="top" headers="d3380e175">Identification and definition of a medication.</td>
+<td headers="d3380e172">Medication</td>
+<td headers="d3380e175">Identification and definition of a medication.</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e172">MedicationAdministration</td>
-<td valign="top" headers="d3380e175">Event when a patient consumes or is administered medication (such as swallowing a pill or
+<td headers="d3380e172">MedicationAdministration</td>
+<td headers="d3380e175">Event when a patient consumes or is administered medication (such as swallowing a pill or
 using an inhaler).</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e172">MedicationOrder</td>
-<td valign="top" headers="d3380e175">Order (prescription) for a supply of a medication and administration instructions.</td>
+<td headers="d3380e172">MedicationOrder</td>
+<td headers="d3380e175">Order (prescription) for a supply of a medication and administration instructions.</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e172">MedicationStatement</td>
-<td valign="top" headers="d3380e175">A record of the medication that is consumed by a patient.</td>
+<td headers="d3380e172">MedicationStatement</td>
+<td headers="d3380e175">A record of the medication that is consumed by a patient.</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e172">Observation</td>
-<td valign="top" headers="d3380e175">Patient measurements and other measurements or basic information such as: <ul id="wp4h_gxp_c_fhir_service__ul_uq4_mq5_xcb">
+<td headers="d3380e172">Observation</td>
+<td headers="d3380e175">Patient measurements and other measurements or basic information such as: <ul id="wp4h_gxp_c_fhir_service__ul_uq4_mq5_xcb">
 <li>Patient height and weight </li>
 <li>Device observation </li>
 <li>Weather information</li>
@@ -131,33 +136,33 @@ using an inhaler).</td>
 </td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e172">Organization</td>
-<td valign="top" headers="d3380e175">Healthcare organization or clinical research organization, or organization site
+<td headers="d3380e172">Organization</td>
+<td headers="d3380e175">Healthcare organization or clinical research organization, or organization site
 information.</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e172">Patient</td>
-<td valign="top" headers="d3380e175">Patient demographics.</td>
+<td headers="d3380e172">Patient</td>
+<td headers="d3380e175">Patient demographics.</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e172">Person</td>
-<td valign="top" headers="d3380e175">Name, address, and other information about a patient, practitioner, or other user.</td>
+<td headers="d3380e172">Person</td>
+<td headers="d3380e175">Name, address, and other information about a patient, practitioner, or other user.</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e172">Practitioner</td>
-<td valign="top" headers="d3380e175">Researcher, medical or general wellness practitioner.</td>
+<td headers="d3380e172">Practitioner</td>
+<td headers="d3380e175">Researcher, medical or general wellness practitioner.</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e172">Questionnaire</td>
-<td valign="top" headers="d3380e175">Structured set of questions for collecting patient information.</td>
+<td headers="d3380e172">Questionnaire</td>
+<td headers="d3380e175">Structured set of questions for collecting patient information.</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e172">QuestionnaireResponse</td>
-<td valign="top" headers="d3380e175">List of answers in response to a questionnaire.</td>
+<td headers="d3380e172">QuestionnaireResponse</td>
+<td headers="d3380e175">List of answers in response to a questionnaire.</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e172">RelatedPerson</td>
-<td valign="top" headers="d3380e175">A caregiver (guardian or third party) who is responsible for a minor or non-competent
+<td headers="d3380e172">RelatedPerson</td>
+<td headers="d3380e175">A caregiver (guardian or third party) who is responsible for a minor or non-competent
 adult.</td>
 </tr>
 </tbody>
@@ -167,166 +172,167 @@ A number of resource types require specific attributes or extension elements for
 
 <table id="wp4h_gxp_c_fhir_service__table_ghw_mxq_ycb">
 <caption>Table 2. Resources that require attributes or extension elements</caption>
-<thead style="text-align:left;">
+<thead style="text-align:center; vertical-align:top">
 <tr>
-<th valign="top" id="d3380e418">ResourceType</th>
-<th valign="top" id="d3380e421">appName</th>
-<th valign="top" id="d3380e424">appVersion Number</th>
-<th valign="top" id="d3380e427">Composite Keys</th>
-<th valign="top" id="d3380e430">PatientID</th>
-<th valign="top" id="d3380e434">SiteID</th>
-<th valign="top" id="d3380e437">StudyID</th>
+<th id="d3380e418">ResourceType</th>
+<th id="d3380e421">appName</th>
+<th id="d3380e424">appVersion Number</th>
+<th id="d3380e427">Composite Keys</th>
+<th id="d3380e430">PatientID</th>
+<th id="d3380e434">SiteID</th>
+<th id="d3380e437">StudyID</th>
 </tr>
 </thead>
-<tbody>
+<tbody style="text-align:left; vertical-align:top">
 <tr>
-<td valign="top" headers="d3380e418">Patient</td>
-<td valign="top" headers="d3380e421"> </td>
-<td valign="top" headers="d3380e424"> </td>
-<td valign="top" headers="d3380e427"> </td>
-<td valign="top" headers="d3380e430">X</td>
-<td valign="top" headers="d3380e434">X</td>
-<td valign="top" headers="d3380e437">X</td>
+<td headers="d3380e418">Patient</td>
+<td headers="d3380e421"> </td>
+<td headers="d3380e424"> </td>
+<td headers="d3380e427"> </td>
+<td style="text-align:center" headers="d3380e430">X</td>
+<td style="text-align:center" headers="d3380e434">X</td>
+<td style="text-align:center" headers="d3380e437">X</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e418">RelatedPerson</td>
-<td valign="top" headers="d3380e421"> </td>
-<td valign="top" headers="d3380e424"> </td>
-<td valign="top" headers="d3380e427"> </td>
-<td valign="top" headers="d3380e430">X</td>
-<td valign="top" headers="d3380e434"> </td>
-<td valign="top" headers="d3380e437"> </td>
+<td headers="d3380e418">RelatedPerson</td>
+<td headers="d3380e421"> </td>
+<td headers="d3380e424"> </td>
+<td headers="d3380e427"> </td>
+<td style="text-align:center" headers="d3380e430">X</td>
+<td headers="d3380e434"> </td>
+<td headers="d3380e437"> </td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e418">Contract</td>
-<td valign="top" headers="d3380e421">X</td>
-<td valign="top" headers="d3380e424">X</td>
-<td valign="top" headers="d3380e427"> </td>
-<td valign="top" headers="d3380e430">X</td>
-<td valign="top" headers="d3380e434">X</td>
-<td valign="top" headers="d3380e437">X</td>
+<td headers="d3380e418">Contract</td>
+<td style="text-align:center" headers="d3380e421">X</td>
+<td style="text-align:center" headers="d3380e424">X</td>
+<td headers="d3380e427"> </td>
+<td style="text-align:center" headers="d3380e430">X</td>
+<td style="text-align:center" headers="d3380e434">X</td>
+<td style="text-align:center" headers="d3380e437">X</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e418">CarePlan</td>
-<td valign="top" headers="d3380e421">X</td>
-<td valign="top" headers="d3380e424">X</td>
-<td valign="top" headers="d3380e427"> </td>
-<td valign="top" headers="d3380e430">X</td>
-<td valign="top" headers="d3380e434">X</td>
-<td valign="top" headers="d3380e437">X</td>
+<td headers="d3380e418">CarePlan</td>
+<td style="text-align:center" headers="d3380e421">X</td>
+<td style="text-align:center" headers="d3380e424">X</td>
+<td headers="d3380e427"> </td>
+<td style="text-align:center" headers="d3380e430">X</td>
+<td style="text-align:center" headers="d3380e434">X</td>
+<td style="text-align:center" headers="d3380e437">X</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e418">Communication</td>
-<td valign="top" headers="d3380e421"> </td>
-<td valign="top" headers="d3380e424"> </td>
-<td valign="top" headers="d3380e427"> </td>
-<td valign="top" headers="d3380e430"> </td>
-<td valign="top" headers="d3380e434"> </td>
-<td valign="top" headers="d3380e437">X</td>
+<td headers="d3380e418">Communication</td>
+<td headers="d3380e421"> </td>
+<td headers="d3380e424"> </td>
+<td headers="d3380e427"> </td>
+<td headers="d3380e430"> </td>
+<td headers="d3380e434"> </td>
+<td style="text-align:center" headers="d3380e437">X</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e418">MedicationOrder</td>
-<td valign="top" headers="d3380e421">X</td>
-<td valign="top" headers="d3380e424">X</td>
-<td valign="top" headers="d3380e427"> </td>
-<td valign="top" headers="d3380e430">X</td>
-<td valign="top" headers="d3380e434">X</td>
-<td valign="top" headers="d3380e437">X</td>
+<td headers="d3380e418">MedicationOrder</td>
+<td style="text-align:center" headers="d3380e421">X</td>
+<td style="text-align:center" headers="d3380e424">X</td>
+<td style="text-align:center" headers="d3380e427"> </td>
+<td style="text-align:center" headers="d3380e430">X</td>
+<td style="text-align:center" headers="d3380e434">X</td>
+<td style="text-align:center" headers="d3380e437">X</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e418">DeviceMetric</td>
-<td valign="top" headers="d3380e421">X</td>
-<td valign="top" headers="d3380e424">X</td>
-<td valign="top" headers="d3380e427"> </td>
-<td valign="top" headers="d3380e430">X</td>
-<td valign="top" headers="d3380e434">X</td>
-<td valign="top" headers="d3380e437">X</td>
+<td headers="d3380e418">DeviceMetric</td>
+<td style="text-align:center" headers="d3380e421">X</td>
+<td style="text-align:center" headers="d3380e424">X</td>
+<td headers="d3380e427"> </td>
+<td style="text-align:center" headers="d3380e430">X</td>
+<td style="text-align:center" headers="d3380e434">X</td>
+<td style="text-align:center" headers="d3380e437">X</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e418">Medication</td>
-<td valign="top" headers="d3380e421"> </td>
-<td valign="top" headers="d3380e424"> </td>
-<td valign="top" headers="d3380e427"> </td>
-<td valign="top" headers="d3380e430"> </td>
-<td valign="top" headers="d3380e434"> </td>
-<td valign="top" headers="d3380e437">X</td>
+<td headers="d3380e418">Medication</td>
+<td headers="d3380e421"> </td>
+<td headers="d3380e424"> </td>
+<td headers="d3380e427"> </td>
+<td headers="d3380e430"> </td>
+<td headers="d3380e434"> </td>
+<td style="text-align:center" headers="d3380e437">X</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e418">Observation (Low-Volume)</td>
-<td valign="top" headers="d3380e421">X</td>
-<td valign="top" headers="d3380e424">X</td>
-<td valign="top" headers="d3380e427"> </td>
-<td valign="top" headers="d3380e430">X</td>
-<td valign="top" headers="d3380e434">X</td>
-<td valign="top" headers="d3380e437">X</td>
+<td headers="d3380e418">Observation (Low-Volume)</td>
+<td style="text-align:center" headers="d3380e421">X</td>
+<td style="text-align:center" headers="d3380e424">X</td>
+<td headers="d3380e427"> </td>
+<td style="text-align:center" headers="d3380e430">X</td>
+<td style="text-align:center" headers="d3380e434">X</td>
+<td style="text-align:center" headers="d3380e437">X</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e418">Observation (High Volume)</td>
-<td valign="top" headers="d3380e421">X</td>
-<td valign="top" headers="d3380e424">X</td>
-<td valign="top" headers="d3380e427">X</td>
-<td valign="top" headers="d3380e430">X</td>
-<td valign="top" headers="d3380e434">X</td>
-<td valign="top" headers="d3380e437">X</td>
+<td headers="d3380e418">Observation (High Volume)</td>
+<td style="text-align:center" headers="d3380e421">X</td>
+<td style="text-align:center" headers="d3380e424">X</td>
+<td style="text-align:center" headers="d3380e427">X</td>
+<td style="text-align:center" headers="d3380e430">X</td>
+<td style="text-align:center" headers="d3380e434">X</td>
+<td style="text-align:center" headers="d3380e437">X</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e418">Questionnaire</td>
-<td valign="top" headers="d3380e421"> </td>
-<td valign="top" headers="d3380e424"> </td>
-<td valign="top" headers="d3380e427"> </td>
-<td valign="top" headers="d3380e430"> </td>
-<td valign="top" headers="d3380e434"> </td>
-<td valign="top" headers="d3380e437">X</td>
+<td headers="d3380e418">Questionnaire</td>
+<td headers="d3380e421"> </td>
+<td headers="d3380e424"> </td>
+<td headers="d3380e427"> </td>
+<td headers="d3380e430"> </td>
+<td headers="d3380e434"> </td>
+<td style="text-align:center" headers="d3380e437">X</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e418">ErrorLog (Virtual Resource)</td>
-<td valign="top" headers="d3380e421">X</td>
-<td valign="top" headers="d3380e424">X</td>
-<td valign="top" headers="d3380e427"> </td>
-<td valign="top" headers="d3380e430">X</td>
-<td valign="top" headers="d3380e434">X</td>
-<td valign="top" headers="d3380e437">X</td>
+<td headers="d3380e418">ErrorLog (Virtual Resource)</td>
+<td style="text-align:center" headers="d3380e421">X</td>
+<td style="text-align:center" headers="d3380e424">X</td>
+<td headers="d3380e427"> </td>
+<td style="text-align:center" headers="d3380e430">X</td>
+<td style="text-align:center" headers="d3380e434">X</td>
+<td style="text-align:center" headers="d3380e437">X</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e418">MedicationAdministration</td>
-<td valign="top" headers="d3380e421">X</td>
-<td valign="top" headers="d3380e424">X</td>
-<td valign="top" headers="d3380e427">X</td>
-<td valign="top" headers="d3380e430">X</td>
-<td valign="top" headers="d3380e434">X</td>
-<td valign="top" headers="d3380e437">X</td>
+<td headers="d3380e418">MedicationAdministration</td>
+<td style="text-align:center" headers="d3380e421">X</td>
+<td style="text-align:center" headers="d3380e424">X</td>
+<td style="text-align:center" headers="d3380e427">X</td>
+<td style="text-align:center" headers="d3380e430">X</td>
+<td style="text-align:center" headers="d3380e434">X</td>
+<td style="text-align:center" headers="d3380e437">X</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e418">MedicationStatement</td>
-<td valign="top" headers="d3380e421">X</td>
-<td valign="top" headers="d3380e424">X</td>
-<td valign="top" headers="d3380e427">X</td>
-<td valign="top" headers="d3380e430">X</td>
-<td valign="top" headers="d3380e434">X</td>
-<td valign="top" headers="d3380e437">X</td>
+<td headers="d3380e418">MedicationStatement</td>
+<td style="text-align:center" headers="d3380e421">X</td>
+<td style="text-align:center" headers="d3380e424">X</td>
+<td style="text-align:center" headers="d3380e427">X</td>
+<td style="text-align:center" headers="d3380e430">X</td>
+<td style="text-align:center" headers="d3380e434">X</td>
+<td style="text-align:center" headers="d3380e437">X</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e418">QuestionnaireResponse</td>
-<td valign="top" headers="d3380e421">X</td>
-<td valign="top" headers="d3380e424">X</td>
-<td valign="top" headers="d3380e427">X</td>
-<td valign="top" headers="d3380e430">X</td>
-<td valign="top" headers="d3380e434">X</td>
-<td valign="top" headers="d3380e437">X</td>
+<td headers="d3380e418">QuestionnaireResponse</td>
+<td style="text-align:center" headers="d3380e421">X</td>
+<td style="text-align:center" headers="d3380e424">X</td>
+<td style="text-align:center" headers="d3380e427">X</td>
+<td style="text-align:center" headers="d3380e430">X</td>
+<td style="text-align:center" headers="d3380e434">X</td>
+<td style="text-align:center" headers="d3380e437">X</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e418">Location</td>
-<td valign="top" headers="d3380e421">X</td>
-<td valign="top" headers="d3380e424">X</td>
-<td valign="top" headers="d3380e427"> </td>
-<td valign="top" headers="d3380e430"> </td>
-<td valign="top" headers="d3380e434"> </td>
-<td valign="top" headers="d3380e437"> </td>
+<td headers="d3380e418">Location</td>
+<td style="text-align:center" headers="d3380e421">X</td>
+<td style="text-align:center" headers="d3380e424">X</td>
+<td headers="d3380e427"> </td>
+<td headers="d3380e430"> </td>
+<td headers="d3380e434"> </td>
+<td headers="d3380e437"> </td>
 </tr>
 </tbody>
 </table>
 
-The extension URIs are as follows::
+### FHIR extension URIs
+The extension URIs are as follows:
 
 - appName - `http://www.ibm.com/watsonhealth/fhir/extensions/whc-lsf/r1/appName` (commercial programs only)
 - appVersionNumber - `http://www.ibm.com/watsonhealth/fhir/extensions/whc-lsf/r1/appVersionNumber` (commercial programs only)
@@ -335,8 +341,7 @@ The extension URIs are as follows::
 - SiteID - `http://www.ibm.com/watsonhealth/fhir/extensions/whc-lsf/1.0/siteID` (clinical studies only)
 - StudyID - `http://www.ibm.com/watsonhealth/fhir/extensions/whc-lsf/1.0/studyid`
 
-Note:
-
+**Notes:**
 - appName and appVersionNumber are only required for commercial programs.
 - SiteId is only required for clinical studies.
 - The Contract resource includes multiple consent types (cloudConsent, shareDataStatement, and termsOfUse). All consent types for the Contract resource also require intIdentifier. When registering a practitioner, the termsOfUse consent type does not use patientID, AppName, or AppVersionNumber.
@@ -349,36 +354,36 @@ High-volume study data (clinical studies or commercial programs) includes data t
 
 <table id="wp4h_gxp_c_fhir_service__table_fdy_5nw_scb">
 <caption>Table 3. High-volume study data</caption><colgroup></colgroup>
-<thead style="text-align:left;">
+<thead style="text-align:center; vertical-align:top">
 <tr>
-<th valign="top" id="d3380e909">FHIR Resource Type</th>
-<th valign="top" id="d3380e912">Example Resource Name</th>
+<th id="d3380e909"; style="width:40%">FHIR Resource Type</th>
+<th id="d3380e912"; style="width:40%"">Example Resource Name</th>
 </tr>
 </thead>
-<tbody>
+<tbody style="text-align:left; vertical-align:top">
 <tr>
-<td valign="top" headers="d3380e909">MedicationAdministration</td>
-<td valign="top" headers="d3380e912">InhalationEvent</td>
+<td headers="d3380e909">MedicationAdministration</td>
+<td headers="d3380e912">InhalationEvent</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e909">MedicationStatement</td>
-<td valign="top" headers="d3380e912">ScheduledEvents</td>
+<td headers="d3380e909">MedicationStatement</td>
+<td headers="d3380e912">ScheduledEvents</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e909">Observation (Device)</td>
-<td valign="top" headers="d3380e912">MedicalDeviceObservation</td>
+<td headers="d3380e909">Observation (Device)</td>
+<td headers="d3380e912">MedicalDeviceObservation</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e909">Observation (Device)</td>
-<td valign="top" headers="d3380e912">MobileDeviceAppObservation</td>
+<td headers="d3380e909">Observation (Device)</td>
+<td headers="d3380e912">MobileDeviceAppObservation</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e909">Observation (Device)</td>
-<td valign="top" headers="d3380e912">MobileDeviceObservation</td>
+<td headers="d3380e909">Observation (Device)</td>
+<td headers="d3380e912">MobileDeviceObservation</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e909">QuestionnaireResponse</td>
-<td valign="top" headers="d3380e912">SurveyResponse</td>
+<td headers="d3380e909">QuestionnaireResponse</td>
+<td headers="d3380e912">SurveyResponse</td>
 </tr>
 </tbody>
 </table>
@@ -387,52 +392,52 @@ Low-volume study data (clinical studies or commercial programs) includes data th
 
 <table id="wp4h_gxp_c_fhir_service__table_xcy_xnw_scb">
 <caption>Table 4. Low-volume study data</caption><colgroup></colgroup>
-<thead style="text-align:left;">
+<thead style="text-align:center; vertical-align:top">
 <tr>
-<th valign="top" id="d3380e993">FHIR Resource Type</th>
-<th valign="top" id="d3380e996">Example Resource Name</th>
+<th id="d3380e993"style="width:40%">FHIR Resource Type</th>
+<th id="d3380e996"style="width:40%">Example Resource Name</th>
 </tr>
 </thead>
-<tbody>
+<tbody style="text-align:left; vertical-align:top">
 <tr>
-<td valign="top" headers="d3380e993">CarePlan</td>
-<td valign="top" headers="d3380e996">CarePlan</td>
+<td headers="d3380e993">CarePlan</td>
+<td headers="d3380e996">CarePlan</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e993">Communication</td>
-<td valign="top" headers="d3380e996">Invitation</td>
+<td headers="d3380e993">Communication</td>
+<td headers="d3380e996">Invitation</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e993">Contract</td>
-<td valign="top" headers="d3380e996">Consent</td>
+<td headers="d3380e993">Contract</td>
+<td headers="d3380e996">Consent</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e993">DeviceMetric</td>
-<td valign="top" headers="d3380e996">UserPreference</td>
+<td headers="d3380e993">DeviceMetric</td>
+<td headers="d3380e996">UserPreference</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e993">Medication</td>
-<td valign="top" headers="d3380e996">Medication</td>
+<td headers="d3380e993">Medication</td>
+<td headers="d3380e996">Medication</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e993">MedicationOrder</td>
-<td valign="top" headers="d3380e996">Prescription</td>
+<td headers="d3380e993">MedicationOrder</td>
+<td headers="d3380e996">Prescription</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e993">Observation (Device)</td>
-<td valign="top" headers="d3380e996">MedicalDevicePairingObservation</td>
+<td headers="d3380e993">Observation (Device)</td>
+<td headers="d3380e996">MedicalDevicePairingObservation</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e993">Observation (Patient)</td>
-<td valign="top" headers="d3380e996">ParticipantObservation (Height)</td>
+<td headers="d3380e993">Observation (Patient)</td>
+<td headers="d3380e996">ParticipantObservation (Height)</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e993">Observation (Patient)</td>
-<td valign="top" headers="d3380e996">ParticipantObservation (Weight)</td>
+<td headers="d3380e993">Observation (Patient)</td>
+<td headers="d3380e996">ParticipantObservation (Weight)</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e993">Questionnaire</td>
-<td valign="top" headers="d3380e996">SurveyQuestion</td>
+<td headers="d3380e993">Questionnaire</td>
+<td headers="d3380e996">SurveyQuestion</td>
 </tr>
 </tbody>
 </table>
@@ -441,28 +446,28 @@ Profile data is data that is directly related to a patient or practitioner. The 
 
 <table id="wp4h_gxp_c_fhir_service__table_qmk_znw_scb">
 <caption>Table 5. Profile data</caption><colgroup></colgroup>
-<thead style="text-align:left;">
+<thead style="text-align:center; vertical-align:top">
 <tr>
-<th valign="top" id="d3380e1112">FHIR Resource Type</th>
-<th valign="top" id="d3380e1115">Example Resource Name</th>
+<th id="d3380e1112"style="width:40%">FHIR Resource Type</th>
+<th id="d3380e1115"style="width:40%">Example Resource Name</th>
 </tr>
 </thead>
-<tbody>
+<tbody style="text-align:left; vertical-align:top">
 <tr>
-<td valign="top" headers="d3380e1112">Patient</td>
-<td valign="top" headers="d3380e1115">Participant</td>
+<td headers="d3380e1112">Patient</td>
+<td headers="d3380e1115">Participant</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e1112">Person</td>
-<td valign="top" headers="d3380e1115">Profile</td>
+<td headers="d3380e1112">Person</td>
+<td headers="d3380e1115">Profile</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e1112">Practitioner</td>
-<td valign="top" headers="d3380e1115">DashboardUser</td>
+<td headers="d3380e1112">Practitioner</td>
+<td headers="d3380e1115">DashboardUser</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e1112">RelatedPerson</td>
-<td valign="top" headers="d3380e1115">Caregiver</td>
+<td headers="d3380e1112">RelatedPerson</td>
+<td headers="d3380e1115">Caregiver</td>
 </tr>
 </tbody>
 </table>
@@ -471,82 +476,82 @@ Reference data is not directly related to a study or patient, but provides backg
 
 <table id="wp4h_gxp_c_fhir_service__table_bwq_14w_scb">
 <caption>Table 6. High-volume reference data</caption><colgroup></colgroup>
-<thead style="text-align:left;">
+<thead style="text-align:center; vertical-align:top">
 <tr>
-<th valign="top" id="d3380e1176">FHIR Resource Type</th>
-<th valign="top" id="d3380e1179">Example Resource Name</th>
+<th id="d3380e1176"; style="width:40%">FHIR Resource Type</th>
+<th id="d3380e1179"; style="width:40%">Example Resource Name</th>
 </tr>
 </thead>
-<tbody>
+<tbody style="text-align:left; vertical-align:top">
 <tr>
-<td valign="top" headers="d3380e1176">Location</td>
-<td valign="top" headers="d3380e1179">Location</td>
+<td headers="d3380e1176">Location</td>
+<td headers="d3380e1179">Location</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e1176">Observation (Weather)</td>
-<td valign="top" headers="d3380e1179">WeatherData</td>
+<td headers="d3380e1176">Observation (Weather)</td>
+<td headers="d3380e1179">WeatherData</td>
 </tr>
 </tbody>
 </table>
 
 Low-volume reference data includes background information that does not change frequently. Virtual resources are generally stored in the low-volume reference data store.
 
-Note: The ConfigParam resource is a virtual resource that describes the resources to add to the {{site.data.keyword.prodname_pde_caps}} service.
+**Note:** The ConfigParam resource is a virtual resource that describes the resources to add to the {{site.data.keyword.prodname_pde_caps}} service.
 
 <table id="wp4h_gxp_c_fhir_service__table_ykv_b4w_scb">
 <caption>Table 7. Low-volume reference data</caption><colgroup></colgroup>
-<thead style="text-align:left;">
+<thead style="text-align:center; vertical-align:top">
 <tr>
-<th valign="top" id="d3380e1226">FHIR Resource Type</th>
-<th valign="top" id="d3380e1229">Example Resource Name</th>
+<th id="d3380e1226"; style="width:40%">FHIR Resource Type</th>
+<th id="d3380e1229"; style="width:40%">Example Resource Name</th>
 </tr>
 </thead>
-<tbody>
+<tbody style="text-align:left; vertical-align:top">
 <tr>
-<td valign="top" headers="d3380e1226">ConfigParam (Virtual Resource)</td>
-<td valign="top" headers="d3380e1229">ConfigParams</td>
+<td headers="d3380e1226">ConfigParam (Virtual Resource)</td>
+<td headers="d3380e1229">ConfigParams</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e1226">Contract</td>
-<td valign="top" headers="d3380e1229">ReferenceContract</td>
+<td headers="d3380e1226">Contract</td>
+<td headers="d3380e1229">ReferenceContract</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e1226">Device</td>
-<td valign="top" headers="d3380e1229">Inhaler</td>
+<td headers="d3380e1226">Device</td>
+<td headers="d3380e1229">Inhaler</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e1226">Device</td>
-<td valign="top" headers="d3380e1229">MobileDevice</td>
+<td headers="d3380e1226">Device</td>
+<td headers="d3380e1229">MobileDevice</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e1226">DeviceComponent</td>
-<td valign="top" headers="d3380e1229">MobileDeviceApp</td>
+<td headers="d3380e1226">DeviceComponent</td>
+<td headers="d3380e1229">MobileDeviceApp</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e1226">Group</td>
-<td valign="top" headers="d3380e1229">Program</td>
+<td headers="d3380e1226">Group</td>
+<td headers="d3380e1229">Program</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e1226">Group</td>
-<td valign="top" headers="d3380e1229">Study</td>
+<td headers="d3380e1226">Group</td>
+<td headers="d3380e1229">Study</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e1226">Organization</td>
-<td valign="top" headers="d3380e1229">CROName</td>
+<td headers="d3380e1226">Organization</td>
+<td headers="d3380e1229">CROName</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e1226">Organization</td>
-<td valign="top" headers="d3380e1229">CMOName</td>
+<td headers="d3380e1226">Organization</td>
+<td headers="d3380e1229">CMOName</td>
 </tr>
 <tr>
-<td valign="top" headers="d3380e1226">Organization</td>
-<td valign="top" headers="d3380e1229">Site</td>
+<td headers="d3380e1226">Organization</td>
+<td headers="d3380e1229">Site</td>
 </tr>
 </tbody>
 </table>
 
-For more information about the FHIR API, see [FHIR Server API](/docs/services/DATA-SERVICES-FHIR/wp4h_gxp_kc_data_services_api.html#concept_isb_c13_1cb) and [FHIR API details](/docs/services/DATA-SERVICES-FHIR/wp4h_gxp_c_fhir_details.html).
+For more information about the FHIR API, see <!-- [FHIR Server API](/docs/services/DATA-SERVICES-FHIR/wp4h_gxp_kc_data_services_api.html#concept_isb_c13_1cb) and --> [FHIR API details](/docs/services/DATA-SERVICES-FHIR/wp4h_gxp_c_fhir_details.html).
 
-**Parent topic:**
+<!-- **Parent topic:**
 
-- [Health data services](/docs/services/DATA-SERVICES-FHIR/wp4h_gxp_c_data_services.html)
+- [Health data services](/docs/services/DATA-SERVICES-FHIR/wp4h_gxp_c_data_services.html) -->
