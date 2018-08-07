@@ -19,16 +19,11 @@ lastupdated: "2018-07-17"
 
 ---
 
- # Getting started with the FHIR API
+ # Getting started with the FHIR REST API
 
+Fast Healthcare Interoperability Resources (FHIR) is a standard for exchanging electronic information between healthcare entities (such as between a patient's primary care physician, cardiologist, and a hospital system). FHIR resources come from many sources, including patient health records, medical devices (such as blood pressure monitors or scales), wearable fitness trackers, or other sources (such as weather data). FHIR resources are strictly formatted and can be accessed via the FHIR service REST API. The {{site.data.keyword.wh_prodname_short}} FHIR service API supports the resources that are described in Table 1 of *Using the FHIR Service*. <!-- [Table 1](/docs/services/DATA-SERVICES-FHIR/wp4h_gxp_c_fhir_service.html#wp4h_gxp_c_fhir_service__table_ckk_scb_hbb).-->
 
-
-Fast Healthcare Interoperability Resources (FHIR) is a standard for exchanging electronic information between healthcare entities (such as between a patient's primary care physician, cardiologist, and a hospital system). FHIR resources come from many sources, including patient health records, medical devices (such as blood pressure monitors or scales), wearable fitness trackers, or other sources (such as weather data). FHIR resources are strictly formatted and can be accessed via the FHIR REST API. 
-
-{{site.data.keyword.wh_prodname_long}} supports a subset of the FHIR search parameters that are described in the FHIR DSTU2 specification. In addition, to use and understand the FHIR REST API, other information about the {{site.data.keyword.wh_prodname_short}} implementation is required.
-
-The {{site.data.keyword.wh_prodname_short}} FHIR service API supports the resources that are described in Table 1 of *Using the FHIR Service*. <!-- [Table 1](/docs/services/DATA-SERVICES-FHIR/wp4h_gxp_c_fhir_service.html#wp4h_gxp_c_fhir_service__table_ckk_scb_hbb).-->
-
+{{site.data.keyword.wh_prodname_long}} also supports a subset of the FHIR search parameters that are described in the FHIR DSTU2 specification. In addition, to use and understand the FHIR REST API, other information about the {{site.data.keyword.wh_prodname_short}} implementation is required.
 
 ## Using the FHIR REST API
 The FHIR REST API is based on the FHIR DSTU2 specification. For detailed information about this version of FHIR and the FHIR specification, see [Welcome to FHIR](http://hl7.org/fhir/DSTU2).
