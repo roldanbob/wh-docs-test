@@ -19,16 +19,16 @@ lastupdated: "2018-07-17"
 
 ---
 
- # Use cases
-Data Services are the heart of {{site.data.keyword.wh_prodname_long}}. Use Data Services to add your data to the {{site.data.keyword.wh_prodname_short}} , prepare it, and make it available for scientific analysis in the data mart or for other uses.
+ # FHIR service examples
+The FHIR service and FHIR REST API are the heart of {{site.data.keyword.wh_prodname_long}}. Use the FHIR service to add your data to the {{site.data.keyword.wh_prodname_short}} , prepare it, and make it available for scientific analysis in the data mart or for other uses.
 
 The {{site.data.keyword.wh_prodname_short}} is designed for flexibility. The following use cases can help you understand how you can use the {{site.data.keyword.wh_prodname_short}} FHIR data service to upload and search FHIR data.
 
 **Note:** The examples in this section contain generic URL endpoints, user names, and other parameters. When you create your own APIs, be sure to replace any generic text with the correct parameters for your site.
 
-## Study design: Creating an asthma inhaler study
+## Designing an asthma inhaler study
 <!-- {: #concept_d5b_djm_p1b__section_gfp_qpt_51b} -->
-A set of clinicians and research scientists want to create a study that is based on inhaler use by patients with asthma. The inhaler for this study is a connected device that produces a rich set of information each time it is used, including (but not limited to) the following data:
+A set of clinicians and research scientists are creating a study for patients with asthma. The patients for this study use an inhaler that is a connected device. Each time a patient takes a puff, the inhaler produces a rich set of information that includes (but not limited to) the following data:
 
 - Patient ID
 - Inhaler ID
@@ -61,9 +61,9 @@ Data for use in this study (or set of studies) can come from various sources, su
 - Image data from CT scans or x-rays.
 - Data in SAS data sets or CSV files that contains previously de-identified data from previous studies.
 
-During the study design phase, designers work with {{site.data.keyword.deptname_whc}} , data scientists, and other personnel to determine what data is	 needed for a study. Then, depending on the data source, use the FHIR server REST API, the {{site.data.keyword.prodname_dl}} REST API, or the {{site.data.keyword.prodname_dr}} REST API to upload and manage the data.
+During the study design phase, designers work with {{site.data.keyword.deptname_whc}}, data scientists, and other personnel to determine what data is needed for a study. Then, <!-- depending on the data source, -->you can use the FHIR server REST API<!-- , the {{site.data.keyword.prodname_dl}} REST API, or the {{site.data.keyword.prodname_dr}} REST API--> to upload and manage the data.
 
-## Use case 1: Adding FHIR data to the FHIR repository
+## Adding FHIR data to the FHIR repository
 {: #concept_d5b_djm_p1b__fhir_usecase}
 
 After you design the study, you know which FHIR resources are needed. Use the FHIR Service APIs to add the resources to the FHIR server.
@@ -163,11 +163,11 @@ curl -X POST \
     }
 ```
 
-For this example, keep the following information in mind that the MedicationAdministration resource includes a number of extensions to the standard MedicationAdministration resource described in the FHIR DSTU2 specification. For the sake of simplicity, only required extensions are shown. For more information about FHIR resources, see the [FHIR DSTU2 Resource list](http://hl7.org/fhir/DSTU2/resourcelist.html){: new_window}.
+For this example, keep in mind that the MedicationAdministration resource includes a number of extensions to the standard MedicationAdministration resource described in the FHIR DSTU2 specification. For the sake of simplicity, only required extensions are shown. For more information about FHIR resources, see the [FHIR DSTU2 Resource list](http://hl7.org/fhir/DSTU2/resourcelist.html){: new_window}.
 
-For all FHIR examples, the `client key` and `client cert` are the key and certificate files of the client application that is signed and issued by the {{site.data.keyword.prodgroupname_short}} Certificate Authority.
+For all FHIR examples, the `client key` and `client cert` are the key and certificate files of the client application that is signed and issued by the {{site.data.keyword.prodgroupname_short}} certificate authority.
 
-## Use case 2: Adding a FHIR Bundle to the FHIR repository
+## Adding a FHIR Bundle to the FHIR repository
 {: #concept_d5b_djm_p1b__section_pfy_r34_jbb}
 
 You can include multiple FHIR resources into a single transaction that is called a "Bundle."  
@@ -260,7 +260,7 @@ curl -X POST \
     }
 ```
 
-## Use case 3: Deleting FHIR data
+## Deleting FHIR data
 {: #concept_d5b_djm_p1b__d71e145}
 
 After you add a FHIR resource to the FHIR repository, you cannot delete it. However, the DELETE API provides a "soft delete," where the DELETE API call creates a new version of the resource, along with a 'deleted' indicator.
@@ -280,7 +280,7 @@ curl -X DELETE \
 ```
 {: screen}
 
-## Use case 4: Searching FHIR data
+## Searching FHIR data
 {: #concept_d5b_djm_p1b__section_g3q_xqm_z1b}
 
 As described in the FHIR specification, you can use the FHIR GET API to find and return records based on criteria that you provide. For more information about searching, see the FHIR specification search documentation at [https://www.hl7.org/fhir/DSTU2/search.html](https://www.hl7.org/fhir/DSTU2/search.html){: new_window}.
@@ -305,4 +305,3 @@ https://watson-health.example.com/fhir-server/api/v1/Medication/?code=745750 \
  -H "IBM-App-User: test_user" \
  -H "IBM-DP-correlationid: test_correlation"
 ```
-{: screen}

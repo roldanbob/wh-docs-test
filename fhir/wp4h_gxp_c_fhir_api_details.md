@@ -21,17 +21,20 @@ lastupdated: "2018-07-17"
 
  # Getting started with the FHIR API
 
-<!-- {{site.data.keyword.wh_prodname_long}} supports a subset of the FHIR search parameters that are described in the FHIR DSTU2 specification. In addition, to use and understand the FHIR REST API, other information about the {{site.data.keyword.wh_prodname_short}} implementation is required.-->
+
 
 Fast Healthcare Interoperability Resources (FHIR) is a standard for exchanging electronic information between healthcare entities (such as between a patient's primary care physician, cardiologist, and a hospital system). FHIR resources come from many sources, including patient health records, medical devices (such as blood pressure monitors or scales), wearable fitness trackers, or other sources (such as weather data). FHIR resources are strictly formatted and can be accessed via the FHIR REST API. 
 
-The {{site.data.keyword.wh_prodname_short}} FHIR service API supports the resources that are described in [Table 1](/docs/services/DATA-SERVICES-FHIR/wp4h_gxp_c_fhir_service.html#wp4h_gxp_c_fhir_service__table_ckk_scb_hbb).
+{{site.data.keyword.wh_prodname_long}} supports a subset of the FHIR search parameters that are described in the FHIR DSTU2 specification. In addition, to use and understand the FHIR REST API, other information about the {{site.data.keyword.wh_prodname_short}} implementation is required.
+
+The {{site.data.keyword.wh_prodname_short}} FHIR service API supports the resources that are described in Table 1 of *Using the FHIR Service*. <!-- [Table 1](/docs/services/DATA-SERVICES-FHIR/wp4h_gxp_c_fhir_service.html#wp4h_gxp_c_fhir_service__table_ckk_scb_hbb).-->
+
 
 ## Using the FHIR REST API
 The FHIR REST API is based on the FHIR DSTU2 specification. For detailed information about this version of FHIR and the FHIR specification, see [Welcome to FHIR](http://hl7.org/fhir/DSTU2).
 
 ### FHIR API methods
-<!--- {: #concept_isb_c13_1cb__section_dz1_tt1_tcb} --->
+{: #concept_isb_c13_1cb__section_dz1_tt1_tcb}
 
 For any resource (or bundle of resources), you can call the following methods:
 
@@ -55,11 +58,11 @@ For any resource (or bundle of resources), you can call the following methods:
    **Note:** The DELETE API performs a soft delete, that is, data is marked as deleted but not actually removed from the data store.
 
 ### FHIR API URL elements
-<!--- {: #concept_isb_c13_1cb__section_n54_4xd_ycb} --->
+{: #concept_isb_c13_1cb__section_n54_4xd_ycb}
 The following URL elements can be used within the calls:
 
 - `[base]` is the URI for the method, for example: `https://demo.watson-health.local/`
-- `{resource type}` is one of the supported FHIR resource types or resource names that are shown in [Table 1](/docs/services/DATA-SERVICES-FHIR/wp4h_gxp_c_fhir_service.html#wp4h_gxp_c_fhir_service__table_ckk_scb_hbb). 
+- `{resource type}` is one of the supported FHIR resource types or resource names that are shown in Table 1 of *Using the FHIR Service*. <!-- [Table 1](/docs/services/DATA-SERVICES-FHIR/wp4h_gxp_c_fhir_service.html#wp4h_gxp_c_fhir_service__table_ckk_scb_hbb). -->
 
   **Note:** In certain circumstances, you can specify a resourceName instead of a resourceType. For example, the Observation resourceType is associated with a number of different resourceNames, such as Observation (Device)::MedicalDeviceObservation and Observation (Patient):: ParticipantObservation (Height) . These resources are routed to different data stores; in this case, you can specify the MedicalDeviceObservation and ParticipantObservation resourceNames. The FHIR API associates the resourceName with the correct resourceType and routes the resources correctly.
 - `{resource type properties}` are the extensions and properties that provide details about each resource type. The extensions are not explicitly called out, but these elements are also needed for POST and PUT methods.
@@ -349,8 +352,8 @@ Because compound keys require an exact match, the `exact` modifier is the only l
 
 > **Note:** Both `MedicationAdministration` and `Observation` have fields ( `MedicationAdminstration.effectiveTimePeriod` and `Observation.efffectivePeriod`) that use the FHIR Period data type. Because the high volume data store has only a single notion of time, you cannot use these fields for searches. Only the fields that are listed in [Table 6](#wp4h_gxp_c_fhir_details__table_f3h_gv5_z1b) can be indexed for search.
 
-## FHIR Registration API (custom operations)
-<!-- {: #wp4h_gxp_c_fhir_details__section_pyz_wlk_tdb} -->
+## Using the FHIR Registration API (custom operations)
+{: #wp4h_gxp_c_fhir_details__section_pyz_wlk_tdb}
 The FHIR Registration API provides a set of methods to manage the registration for patients, practitioners, and other people who are involved in a patient's care for clinical studies and commercial programs.
 
 + For clinical studies, patients and practitioners register directly with the study through the registerPatient or registerPractioner methods.
@@ -369,6 +372,3 @@ The FHIR Registration API provides a set of methods to manage the registration f
 
 * **Removing data from the FHIR repository** - The DELETE API call performs a soft delete. That is, when a resource is deleted, the FHIR service creates a new version of the resource, along with a 'deleted' indicator. This indicator does not exist within the resource JSON itself, but is persisted along with the resource to indicate to the persistence layers that the resource is no longer available. For more information about deletion with FHIR resources, see [https://www.hl7.org/fhir/DSTU2/http.html#delete](https://www.hl7.org/fhir/DSTU2/http.html#delete).
 
-<!-- **Parent topic:**
-
-- [Data services APIs](/docs/services/DATA-SERVICES-FHIR/wp4h_gxp_kc_data_services_api.html)  -->

@@ -5,10 +5,10 @@
 Data Services FHIR
 
     {: .navgroup id="learn"}
-    wp4h_gxp_c_data_services.md
-    wp4h_gxp_c_fhir_details.md
     wp4h_gxp_c_fhir_service.md
-    wp4h_gxp_kc_data_services_api.md
+    wp4h_gxp_c_fhir_api_details.md
+    wp4h_gxp_c_fhir_examples.md
+
     {: .navgroup-end}
 
     {: .navgroup id="howto"}
