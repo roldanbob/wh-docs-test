@@ -19,13 +19,13 @@ lastupdated: "2018-07-17"
 
 ---
 
-# FHIR service
+# Using the FHIR service
 
-The {{site.data.keyword.wh_prodname_long}} Fast Healthcare Interoperability Resources (FHIR) service and REST API support high-volume ingestion of electronic data from multiple sources, including healthcare devices and mobile applications. After processing, FHIR data is accessible to analysis and reporting tools such as Spark jobs and Hive queries and for use in clinical research.
+Fast Healthcare Interoperability Resources (FHIR) provides a framework to pass healthcare information between healthcare and medical applications. The {{site.data.keyword.wh_prodname_long}} FHIR service and FHIR REST API allow your site to ingest high-volume electronic data from multiple sources, including healthcare devices and mobile applications. After processing, FHIR data can be accessed by analysis and reporting tools such as Spark jobs and Hive queries and is available for clinical research.
 
 ## FHIR service overview
 
-Use the FHIR service to upload FHIR-formatted data into the FHIR repository. The FHIR repository consists of multiple data stores that manage your FHIR data logically. FHIR resources are ingested either within the context of clinical studies or programs within commercial studies. Clinical studies are often run across multiple sites and commercial studies usually include multiple programs. For clinical studies, {{site.data.keyword.wh_prodname_short}} ingests data in the context of a specified {{site.data.keyword.study}}. For commercial programs, {{site.data.keyword.wh_prodname_short}} ingests data in the context of an application, or an "app". The commercial data, which includes the application name and version, can then be shared between multiple programs.
+Use the FHIR service to upload FHIR-formatted data into the FHIR repository. The FHIR repository consists of several data stores that manage your FHIR data logically. FHIR resources are ingested either within the context of clinical studies or programs within commercial studies. Clinical studies are often run across multiple sites and commercial studies usually include multiple programs. For clinical studies, {{site.data.keyword.wh_prodname_short}} ingests data in the context of a specified {{site.data.keyword.study}}. For commercial programs, {{site.data.keyword.wh_prodname_short}} ingests data in the context of an application, or an "app". The commercial data, which includes the application name and version, can then be shared between multiple programs.
 
 When a patient enrolls in either a clinical or commercial study, {{site.data.keyword.wh_prodname_short}} takes the following steps to help ensure that the patient is properly enrolled:
 
@@ -33,11 +33,11 @@ When a patient enrolls in either a clinical or commercial study, {{site.data.key
 <!-- - Assign a role to the patient (and the guardian, if applicable) to help ensure that the data is correctly processed and that only authorized users can view this patient's information. For more information, see [{{site.data.keyword.prodname_rram_first}} ](/docs/services/DATA-SERVICES-FHIR/wp4h_gxp_r_rram.html). 
 
   **Note:** Roles are assigned as defined by each client's business need for everyone who might view or manage any patient data, including practitioners, care managers, and administrators. -->
-- As data comes into the FHIR repository, Consent Manager <!-- and {{site.data.keyword.prodname_rram_first}} services perform --> performs additional checks to help ensure that consent <!-- , role, and relationship information are --> information is still valid. 
+- As data comes into the FHIR repository, Consent Manager provides additional checks to help ensure that consent <!-- , role, and relationship information are -->information is still valid. 
 
 [Figure 1](#wp4h_gxp_c_fhir_service__fig_hws_p2v_scb) provides an overview of how data flows from a customer application or device to the FHIR repository and then to the data replicator and data lake.
 
-*Figure 1. FHIR data flow*
+Figure 1. FHIR data flow
 
 ![Data flow of FHIR resources from customer applications through consent manager and role and relationship access manager to the FHIR databases and then to the replication service and data lake.](userImages/ai_FHIR_Overview_21.jpg) As shown in [Figure 1](#wp4h_gxp_c_fhir_service__fig_hws_p2v_scb), FHIR resources move through the {{site.data.keyword.wh_prodname_short}} pipeline in the following steps:
 
@@ -47,15 +47,14 @@ When a patient enrolls in either a clinical or commercial study, {{site.data.key
 
 ## FHIR resources and data stores
 <!-- {: #wp4h_gxp_c_fhir_service__section_nk3_tgv_scb} -->
-
-For {{site.data.keyword.wh_prodname_short}} , the FHIR repository uses the following data stores: <!--  {: #wp4h_gxp_c_fhir_service__section_ylk_q4w_scb} -->
+For {{site.data.keyword.wh_prodname_short}}, the FHIR repository uses the following data stores: <!--  {: #wp4h_gxp_c_fhir_service__section_ylk_q4w_scb} -->
 
 - Each FHIR repository includes four study data stores. Clinical studies and commercial programs each have high- and low-volume data stores.
 
-    - High volume study data stores contain study or program data that can change frequently (multiple times daily).
-    - Low volume study data stores contain study and data that does not change frequently, or that can be used retrospectively. Low-volume data includes FHIR resources such as CarePlan, Contract, Device, DeviceComponent, DeviceMetric, and MedicationOrder.
+    - High volume study data stores include study or program data that can change frequently (multiple times daily).
+    - Low volume study data stores include study data that does not change frequently, or that can be used retrospectively. Low-volume data includes FHIR resources such as CarePlan, Contract, Device, DeviceComponent, DeviceMetric, and MedicationOrder.
 
-- Profile data contains the Patient FHIR resource and related information about the patient (that is, the patient's profile). To protect protected health information (PHI), the Patient resource cannot be accessed or used in predictive studies. However, data from the Profile data store can be used by the {{site.data.keyword.prodname_cro_dw}} service.
+- Profile data contains the Patient FHIR resource and related information about the patient (that is, the patient's profile). To safeguard protected health information (PHI), the Patient resource cannot be accessed or used in predictive studies. However, data from the Profile data store can be used by the {{site.data.keyword.prodname_cro_dw}} service.
 - Reference data store (Low volume) - Contains reference information for studies. Reference FHIR resources include Group, Medication, Organization, Practitioner, Questionnaire, Virtual, and Binary resources. Virtual Resources can include custom and other data that is not forwarded to the data lake.
 
 ### Supported FHIR resources
@@ -128,7 +127,7 @@ using an inhaler).</td>
 </tr>
 <tr>
 <td headers="d3380e172">Observation</td>
-<td headers="d3380e175">Patient measurements and other measurements or basic information such as: <ul id="wp4h_gxp_c_fhir_service__ul_uq4_mq5_xcb">
+<td headers="d3380e175">Patient measurements and other measurements or basic information: <ul id="wp4h_gxp_c_fhir_service__ul_uq4_mq5_xcb">
 <li>Patient height and weight </li>
 <li>Device observation </li>
 <li>Weather information</li>
@@ -332,7 +331,7 @@ A number of resource types require specific attributes or extension elements for
 </table>
 
 ### FHIR extension URIs
-The extension URIs are as follows:
+If you use any of the following extensions, you must use the associated URI.
 
 - appName - `http://www.ibm.com/watsonhealth/fhir/extensions/whc-lsf/r1/appName` (commercial programs only)
 - appVersionNumber - `http://www.ibm.com/watsonhealth/fhir/extensions/whc-lsf/r1/appVersionNumber` (commercial programs only)
@@ -341,14 +340,14 @@ The extension URIs are as follows:
 - SiteID - `http://www.ibm.com/watsonhealth/fhir/extensions/whc-lsf/1.0/siteID` (clinical studies only)
 - StudyID - `http://www.ibm.com/watsonhealth/fhir/extensions/whc-lsf/1.0/studyid`
 
-**Notes:**
+**Notes**
 - appName and appVersionNumber are only required for commercial programs.
 - SiteId is only required for clinical studies.
-- The Contract resource includes multiple consent types (cloudConsent, shareDataStatement, and termsOfUse). All consent types for the Contract resource also require intIdentifier. When registering a practitioner, the termsOfUse consent type does not use patientID, AppName, or AppVersionNumber.
+- The Contract resource includes multiple consent types (cloudConsent, shareDataStatement, and termsOfUse). All consent types for the Contract resource also require intIdentifier. When you register a practitioner, the termsOfUse consent type does not use patientID, AppName, or AppVersionNumber.
 - For high-volume, study scoped Observation resources, the composite key is `http://www.ibm.com/watsonhealth/fhir/extensions/whc-lsf/r1/ck/ptnIDrsrceNMsiteIDstdID`.
 - For MedicationAdministration, the composite key is `http://www.ibm.com/watsonhealth/fhir/extensions/whc-lsf/r1/ck/ptnIDsiteIDstdID`.
 
-For {{site.data.keyword.wh_prodname_short}} , FHIR resource type and resource name pairs are sorted into high and low volume data stores. Resources are stored in different data stores to provide efficient searching, retrieval, and backup capabilities. As shown in the following tables, the FHIR resource names can affect where some resources are stored. These tables show examples of resource names, but the actual resource names depend on your site's requirements.
+For {{site.data.keyword.wh_prodname_short}}, FHIR resource type and resource name pairs are sorted into high and low volume data stores. Resources are stored in different data stores to provide efficient searching, retrieval, and backup capabilities. As shown in the following tables, the FHIR resource names can affect where some resources are stored. These tables show examples of resource names, but the actual resource names depend on your site's requirements.
 
 High-volume study data (clinical studies or commercial programs) includes data that is directly related to a study or program that can change frequently. For example, the resource is updated every time that a medical device is activated, or a patient responds to a daily questionnaire. High-volume resources require compound keys to allow for indexing (for faster search and retrieval).
 
@@ -388,7 +387,7 @@ High-volume study data (clinical studies or commercial programs) includes data t
 </tbody>
 </table>
 
-Low-volume study data (clinical studies or commercial programs) includes data that is directly related to a study or program that is not expected to change frequently. For example, while the response to a daily survey question is recorded daily, the question itself does not generally change (How are you feeling today?).
+Low-volume study data (clinical studies or commercial programs) includes data that is directly related to a study or program that is not expected to change frequently. For example, while the response to a daily survey question is recorded daily, the question, such as "How are you feeling today?" does not generally change.
 
 <table id="wp4h_gxp_c_fhir_service__table_xcy_xnw_scb">
 <caption>Table 4. Low-volume study data</caption><colgroup></colgroup>
@@ -550,8 +549,4 @@ Low-volume reference data includes background information that does not change f
 </tbody>
 </table>
 
-For more information about the FHIR API, see <!-- [FHIR Server API](/docs/services/DATA-SERVICES-FHIR/wp4h_gxp_kc_data_services_api.html#concept_isb_c13_1cb) and --> [FHIR API details](/docs/services/DATA-SERVICES-FHIR/wp4h_gxp_c_fhir_details.html).
-
-<!-- **Parent topic:**
-
-- [Health data services](/docs/services/DATA-SERVICES-FHIR/wp4h_gxp_c_data_services.html) -->
+For more information about the FHIR API, see FHIR API details](/docs/services/DATA-SERVICES-FHIR/wp4h_gxp_c_fhir_details.html).
