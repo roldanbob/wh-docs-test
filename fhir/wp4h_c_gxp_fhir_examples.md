@@ -84,17 +84,18 @@ The following sample POST command uploads the `MedicationAdministration` FHIR re
 
 ```
 curl -X POST \
-  https://192.168.99.100:9443/fhir-server/api/v1/MedicationAdministration \
-  --key <client key> --cert <client cert> \ 
-  -H 'Content-Type: application/json' \
-  -H 'IBM-App-User: PatientUser-1' \
-  -H 'IBM-App-User-IntId: 11111111-1111-1111-1111-1111111111111111' \
-  -H 'IBM-DP-correlationid: IBM-DP-correlationid' \
+  https://watson-health.example.com/fhir-server/api/v1/MedicationAdministration \
+   --key "${HOSTNAME}.nopass.key.pem" \
+   --cert "${HOSTNAME}.cert.pem" \   
+   -H 'Content-Type: application/json' \
+   -H 'IBM-App-User: PatientUser-1' \
+   -H 'IBM-App-User-IntId: 11111111-1111-1111-1111-1111111111111111' \
+   -H 'IBM-DP-correlationid: IBM-DP-correlationid' \
   --data '{
     "resourceType" : "MedicationAdministration",
     "meta" : {
         "versionId" : "3",
-        "lastUpdated" : "2017-10-25T06:23:39.901Z"
+        "lastUpdated" : "2018-10-25T06:23:39.901Z"
 		},
         "extension": [
           {
@@ -131,7 +132,7 @@ curl -X POST \
         "status": "completed",
         "patient": {
           "reference": "Patient/f5634e29-963d-4d2e-b192-fa52995af40f",
-          "display": "IBMTest_COM_102@us.ibm.com"
+          "display": "GxPDryRun2_COM_102@us.ibm.com"
         },
         "wasNotGiven": false,
         "reasonGiven": [
@@ -144,7 +145,7 @@ curl -X POST \
             ]
           }
         ],
-    "effectiveTimeDateTime": "2017-08-08T14:36:33.123Z",
+    "effectiveTimeDateTime": "2018-08-08T14:36:33.123Z",
         "medicationReference": {
           "reference": "Medication/d1617804-46f8-4806-b816-7fc59b3dcc26",
           "display": "Rescue"
@@ -193,7 +194,7 @@ curl -X POST \
         "resourceType": "MedicationAdministration",
         "meta": {
           "versionId": "3",
-          "lastUpdated": "2017-10-25T06:23:39.901Z"
+          "lastUpdated": "2018-10-25T06:23:39.901Z"
         "extension": [{
           "url": "http://www.ibm.com/watsonhealth/fhir/extensions/whc-lsf/r1/resourceName",
           "valueString": "InhalationEvent"
@@ -223,7 +224,7 @@ curl -X POST \
         "patient": {
           "reference": "Patient/0cccba34-2446-4e97-a358-e99e4b9156ee"
         },
-        "effectiveTimeDateTime": "2017-06-14T03:09:15.929Z",
+        "effectiveTimeDateTime": "2018-06-14T03:09:15.929Z",
         "medicationReference": {
           "reference": "Medication/medicationexample6"
         },
@@ -252,7 +253,7 @@ curl -X POST \
         "resourceType": "Observation",
         "meta": {
           "versionId": "1",
-          "lastUpdated": "2017-09-25T09:55:04.798Z",
+          "lastUpdated": "2018-09-25T09:55:04.798Z",
         },
         "extension": [ {
             "url": "http://www.ibm.com/watsonhealth/fhir/extensions/whc-lsf/1.0/studyid",
@@ -308,7 +309,7 @@ curl -X POST \
         "subject": {
           "reference": "Device/abbee692-d3f9-47dc-87f5-af1ead60b693"
         },
-        "effectiveDateTime": "2017-08-29T09:54:29",
+        "effectiveDateTime": "2018-08-29T09:54:29",
         "valueQuantity": {
           "value": 40,
           "unit": "puff",
@@ -325,7 +326,7 @@ curl -X POST \
         "resourceType": "QuestionnaireResponse",
         "meta": {
           "versionId": "1",
-          "lastUpdated": "2017-09-25T10:59:31.633Z",
+          "lastUpdated": "2018-09-25T10:59:31.633Z",
         },
         "extension": [{
           "url": "http://www.ibm.com/watsonhealth/fhir/extensions/whc-lsf/1.0/patientid",
@@ -350,7 +351,7 @@ curl -X POST \
           "valueString": "11111111-1111-1111-1111-1111111111111111_site001_study001"
         },
         "status": "completed",
-        "authored": "2017-09-16T00:00:00",
+        "authored": "2018-09-16T00:00:00",
         "group": {
           "linkId": "1.0",
           "title": "General Questions",
